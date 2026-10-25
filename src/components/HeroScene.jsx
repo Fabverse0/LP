@@ -38,9 +38,16 @@ export default function HeroScene() {
     };
   }, []);
 
-  function markLoaded(name) {
-    loaded.current.add(name);
-    if (loaded.current.size === layers.length) setReady(true);
+  async function markLoaded(name, image) {
+    try {
+      // A load event can precede an async image's first decoded frame.
+      // Keep the complete artwork visible until every layer can be painted.
+      if (image.decode) await image.decode();
+      loaded.current.add(name);
+      if (loaded.current.size === layers.length) setReady(true);
+    } catch {
+      // A failed layer leaves the original artwork in place.
+    }
   }
 
   return (
@@ -61,7 +68,7 @@ export default function HeroScene() {
             height="2160"
             decoding="async"
             fetchPriority={layer.name === "landscape" ? "high" : "auto"}
-            onLoad={() => markLoaded(layer.name)}
+            onLoad={(event) => markLoaded(layer.name, event.currentTarget)}
           />
         ))}
       </div>
