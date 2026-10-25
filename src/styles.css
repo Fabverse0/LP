@@ -110,7 +110,7 @@ p {
   --red: #193748;
   --red-bright: #244d61;
   --pink-paper: #d4edf6;
-  --scene-filter: hue-rotate(158deg) saturate(0.78) brightness(0.7) contrast(1.08);
+  --scene-filter: grayscale(1) sepia(1) hue-rotate(165deg) saturate(1.4) brightness(0.72) contrast(1.08);
 }
 
 .story,
@@ -369,14 +369,14 @@ p {
 .folder--story {
   z-index: 1;
   top: 0;
-  --folder-color: rgb(18 32 43 / 95%);
+  --folder-color: color-mix(in srgb, var(--blue) 70%, var(--night));
   background: var(--folder-color);
 }
 
 .folder--hour {
   z-index: 2;
   top: 60px;
-  --folder-color: rgb(154 24 42 / 96%);
+  --folder-color: color-mix(in srgb, var(--red) 85%, var(--night));
   background: var(--folder-color);
 }
 
@@ -384,7 +384,7 @@ p {
   z-index: 3;
   top: 120px;
   min-height: 150px;
-  --folder-color: rgb(8 14 20 / 97%);
+  --folder-color: var(--night);
   background: var(--folder-color);
 }
 
@@ -1178,18 +1178,11 @@ p {
     margin-top: 13px;
     object-fit: cover;
     object-position: center 55%;
+    filter: var(--scene-filter);
   }
 
   .hour-index__item[aria-pressed="true"] .hour-index__preview {
     display: block;
-  }
-
-  .hour-index__preview[data-hour="ember"] {
-    filter: saturate(1.4) sepia(0.16) contrast(1.05) brightness(1.04);
-  }
-
-  .hour-index__preview[data-hour="night"] {
-    filter: hue-rotate(158deg) saturate(0.78) brightness(0.7) contrast(1.08);
   }
 
   .hour__visual {
