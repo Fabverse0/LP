@@ -98,7 +98,7 @@ function App() {
               <span>senja</span>
             </h1>
             <p className="hero__description" data-reveal>
-              Kisah visual fiktif tentang seorang ronin di bawah matahari merah.
+              Kisah fiktif seorang ronin di bawah matahari merah.
             </p>
           </div>
 
@@ -106,12 +106,10 @@ function App() {
             <a className="folder folder--story" href="#story" data-reveal>
               <span className="folder__tab">Kisah</span>
               <span className="folder__label">Jalan tanpa tuan</span>
-              <span className="folder__hint">Buka bab</span>
             </a>
             <a className="folder folder--hour" href="#hour" data-reveal>
               <span className="folder__tab">Suasana</span>
               <span className="folder__label">Ubah suasana</span>
-              <span className="folder__hint">Pilih waktu</span>
             </a>
             <a className="folder folder--read" href="#story" data-reveal>
               <span className="folder__tab">Kage</span>
@@ -135,9 +133,11 @@ function App() {
             <div
               className="story__art"
               role="img"
-              aria-label="Potongan artwork memperlihatkan siluet ronin dan rumput merah di bawah matahari senja."
+              aria-label="Siluet ronin di antara rumput gelap, menghadap matahari merah."
               data-reveal
-            />
+            >
+              <img className="story__art-image" src={artwork} alt="" aria-hidden="true" />
+            </div>
 
             <div className="story__narrative">
               <p data-reveal>
@@ -180,46 +180,75 @@ function App() {
                     onClick={() => setActiveHour(hour.id)}
                   >
                     <span className="hour-index__label">{hour.label}</span>
-                    <span className="hour-index__preview" data-hour={hour.id} aria-hidden="true" />
+                    <img
+                      className="hour-index__preview"
+                      src={artwork}
+                      alt=""
+                      data-hour={hour.id}
+                      aria-hidden="true"
+                    />
                   </button>
                 ))}
               </div>
             </div>
 
             <div className="hour__visual" data-reveal>
-              <div
-                className={`hour-preview hour-preview--${activeHour}`}
-                role="img"
-                aria-label={`Preview artwork pada suasana ${selectedHour.label.toLowerCase()}.`}
-              >
+              <figure className={`hour-preview hour-preview--${activeHour}`}>
+                <img className="hour-preview__image" src={artwork} alt="" aria-hidden="true" />
                 <span className="hour-preview__caption">{selectedHour.label}</span>
-              </div>
+              </figure>
               <p className="hour__credit">Satu artwork, tiga suasana warna.</p>
             </div>
           </div>
         </section>
 
         <a className="closing-band" href="#story" aria-label="Baca kembali kisah Kage">
-          <span className="closing-band__note">Kembali ke jalan yang sama.</span>
-          <span className="closing-band__arrow">
+          <span className="closing-band__note" data-reveal>
+            Kembali ke jalan yang sama.
+          </span>
+          <span className="closing-band__arrow" data-reveal>
             <ArrowMark />
           </span>
-          <h2 className="closing-band__word">Baca</h2>
+          <img
+            className="closing-band__still"
+            src={artwork}
+            alt="Cakrawala merah dan siluet ronin, dipotong lebih dekat."
+            data-reveal
+          />
+          <h2 className="closing-band__word" data-reveal>
+            Baca
+          </h2>
         </a>
       </main>
 
       <footer className="site-footer" id="ending">
         <div className="site-footer__top">
-          <p className="site-footer__note">Kisah visual fiktif, dibangun dari satu gambar.</p>
-          <nav className="footer-nav" aria-label="Navigasi penutup">
+          <p className="site-footer__note" data-reveal>
+            Kisah visual fiktif, dibangun dari satu gambar.
+          </p>
+          <img
+            className="site-footer__still"
+            src={artwork}
+            alt=""
+            aria-hidden="true"
+            data-reveal
+          />
+          <nav className="footer-nav" aria-label="Navigasi penutup" data-reveal>
             <a href="#story">Kisah</a>
             <a href="#hour">Suasana</a>
             <a href="#top">Kembali ke atas</a>
           </nav>
         </div>
         <div className="site-footer__bottom">
-          <h2 className="site-footer__wordmark">KAGE</h2>
-          <a className="site-footer__return" href="#top" aria-label="Kembali ke awal halaman">
+          <h2 className="site-footer__wordmark" data-reveal>
+            KAGE
+          </h2>
+          <a
+            className="site-footer__return"
+            href="#top"
+            aria-label="Kembali ke awal halaman"
+            data-reveal
+          >
             <span>Kembali ke awal</span>
             <ArrowMark />
           </a>
