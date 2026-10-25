@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import HeroScene from "./components/HeroScene.jsx";
 
 const artwork = "/images/kage-ronin-4k.webp";
 
@@ -87,11 +88,7 @@ function App() {
 
       <main id="main">
         <section className="hero" id="top" aria-labelledby="hero-title">
-          <div
-            className="hero__art"
-            role="img"
-            aria-label="Seorang ronin berdiri di tengah ladang gelap, menghadap matahari merah di balik gunung."
-          />
+          <HeroScene />
           <div className="hero__copy">
             <h1 className="hero__title" id="hero-title" data-reveal>
               <span>Sisa</span>
