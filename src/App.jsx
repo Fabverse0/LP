@@ -100,9 +100,6 @@ function App() {
             <p className="hero__description" data-reveal>
               Kisah visual fiktif tentang seorang ronin di bawah matahari merah.
             </p>
-            <a className="hero__action" href="#story" data-reveal>
-              Baca kisah <ArrowMark />
-            </a>
           </div>
 
           <nav className="folder-stack" aria-label="Bab cerita">
@@ -122,7 +119,6 @@ function App() {
               <span className="folder__action">Baca <ArrowMark /></span>
             </a>
           </nav>
-          <p className="hero__image-note">Artwork latar: gambar yang diberikan</p>
         </section>
 
         <section className="story chapter" id="story" aria-labelledby="story-title">
