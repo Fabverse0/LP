@@ -771,6 +771,10 @@ p {
     width: min(33vw, 300px);
   }
 
+  .folder__tab {
+    top: -8px;
+  }
+
   .folder--read {
     display: flex;
     flex-direction: column;
