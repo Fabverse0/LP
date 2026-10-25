@@ -1,0 +1,1052 @@
+:root {
+  color-scheme: dark;
+  --night: #0b1118;
+  --blue: #1c303a;
+  --red: #b51f32;
+  --red-bright: #d73547;
+  --paper: #f4f1eb;
+  --pink-paper: #ffe4e7;
+  --gutter: clamp(20px, 2.2vw, 34px);
+  --size-small: clamp(0.875rem, 0.85rem + 0.08vw, 0.9375rem);
+  --size-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --size-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --size-head: clamp(3rem, 7.6vw, 7.25rem);
+  --font-display: "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  --font-text: "Source Serif 4", Georgia, serif;
+
+  font-family: var(--font-text);
+  font-size: var(--size-body);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+  scroll-padding-top: 28px;
+  background: var(--night);
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: var(--night);
+  color: var(--paper);
+  font-family: var(--font-text);
+  font-size: var(--size-body);
+  line-height: 1.55;
+  font-kerning: normal;
+}
+
+button,
+a {
+  color: inherit;
+  font: inherit;
+}
+
+a {
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 0.07em;
+}
+
+button {
+  border: 0;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--paper);
+  outline-offset: 5px;
+}
+
+::selection {
+  background: var(--red-bright);
+  color: var(--paper);
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  hyphens: none;
+  text-wrap: balance;
+}
+
+p {
+  max-width: 66ch;
+  text-wrap: pretty;
+}
+
+.site-shell {
+  position: relative;
+  overflow: clip;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: 12px;
+  left: 12px;
+  padding: 12px 16px;
+  transform: translateY(-160%);
+  background: var(--paper);
+  color: var(--night);
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.site-header {
+  position: absolute;
+  z-index: 30;
+  top: 0;
+  left: 50%;
+  display: flex;
+  width: min(100%, 1680px);
+  align-items: center;
+  justify-content: space-between;
+  padding: 27px var(--gutter);
+  transform: translateX(-50%);
+  color: var(--paper);
+}
+
+.wordmark {
+  color: inherit;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 3vw, 46px);
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+}
+
+.top-nav a,
+.footer-nav a {
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.top-nav a:hover,
+.footer-nav a:hover {
+  color: var(--pink-paper);
+  text-decoration: underline;
+}
+
+.hero {
+  position: relative;
+  min-height: max(720px, 100svh);
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--night);
+}
+
+.hero__art {
+  position: absolute;
+  z-index: -2;
+  inset: -4%;
+  background-image: url("/images/kage-ronin.jpg");
+  background-position: center 52%;
+  background-size: cover;
+  animation: horizon-drift 24s ease-in-out infinite alternate;
+}
+
+.hero__art::after {
+  position: absolute;
+  inset: 0;
+  background: rgb(5 10 15 / 31%);
+  content: "";
+}
+
+.hero__copy {
+  position: absolute;
+  top: 15%;
+  left: max(var(--gutter), calc((100vw - 1680px) / 2 + var(--gutter)));
+  width: min(42vw, 570px);
+}
+
+.hero__title {
+  display: flex;
+  flex-direction: column;
+  max-width: 6.5ch;
+  color: var(--paper);
+  font-size: clamp(4rem, 9vw, 9.5rem);
+  letter-spacing: -0.04em;
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+
+.hero__title span:first-child {
+  margin-left: -0.04em;
+}
+
+.hero__description {
+  max-width: 34ch;
+  margin-top: 24px;
+  color: var(--paper);
+  font-size: var(--size-lead);
+  line-height: 1.4;
+}
+
+.folder-stack {
+  position: absolute;
+  z-index: 10;
+  top: 56%;
+  left: 50%;
+  width: min(86%, 1180px);
+  height: 330px;
+  transform: translateX(-50%);
+}
+
+.folder {
+  position: absolute;
+  right: 0;
+  left: 0;
+  display: grid;
+  min-height: 90px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  padding: 23px 34px 19px;
+  color: var(--paper);
+  text-decoration: none;
+  transition: transform 220ms ease;
+}
+
+.folder:hover {
+  transform: translateY(-5px);
+}
+
+.folder--story {
+  z-index: 1;
+  top: 0;
+  --folder-color: rgb(18 32 43 / 95%);
+  background: var(--folder-color);
+}
+
+.folder--hour {
+  z-index: 2;
+  top: 64px;
+  --folder-color: rgb(154 24 42 / 96%);
+  background: var(--folder-color);
+}
+
+.folder--read {
+  z-index: 3;
+  top: 128px;
+  min-height: 188px;
+  --folder-color: rgb(8 14 20 / 97%);
+  background: var(--folder-color);
+}
+
+.folder__tab {
+  position: absolute;
+  top: -25px;
+  left: 34px;
+  min-width: 112px;
+  padding: 3px 18px 5px;
+  clip-path: polygon(0 100%, 0 23%, 10% 23%, 18% 0, 83% 0, 91% 23%, 100% 23%, 100% 100%);
+  background: var(--folder-color);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  text-align: center;
+}
+
+.folder__label {
+  grid-column: 1;
+  font-family: var(--font-display);
+  font-size: var(--size-lead);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.folder__hint {
+  grid-column: 2;
+  color: var(--paper);
+  font-size: var(--size-small);
+}
+
+.folder__action {
+  display: inline-flex;
+  min-width: 142px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  grid-column: 2;
+  padding: 16px 20px;
+  background: var(--red-bright);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: var(--size-body);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.folder__action svg,
+.closing-band__arrow svg,
+.site-footer__return svg {
+  display: block;
+  width: 28px;
+  height: 28px;
+}
+
+.story {
+  display: grid;
+  min-height: 100svh;
+  align-items: center;
+  padding: clamp(100px, 13vh, 160px) var(--gutter);
+  background: var(--blue);
+  color: var(--paper);
+}
+
+.story__layout {
+  display: grid;
+  width: min(100%, 1440px);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: center;
+  column-gap: clamp(16px, 2.5vw, 40px);
+  row-gap: 22px;
+  margin-inline: auto;
+}
+
+.story__heading {
+  grid-column: 1 / 8;
+  grid-row: 1;
+}
+
+.story__heading h2,
+.hour__copy h2 {
+  max-width: 12ch;
+  font-size: var(--size-head);
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+.story__lead,
+.hour__lead {
+  margin-top: 25px;
+  font-size: var(--size-lead);
+  line-height: 1.4;
+}
+
+.story__art {
+  width: min(100%, 530px);
+  aspect-ratio: 1;
+  grid-column: 1 / 7;
+  grid-row: 2 / span 2;
+  justify-self: center;
+  clip-path: circle(47% at 50% 50%);
+  background-image: url("/images/kage-ronin.jpg");
+  background-position: 51% 55%;
+  background-size: cover;
+}
+
+.story__narrative {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  grid-column: 8 / 13;
+  grid-row: 1 / span 2;
+  align-self: center;
+  padding-top: 18px;
+}
+
+.story__narrative p {
+  max-width: 42ch;
+  font-size: var(--size-body);
+  line-height: 1.65;
+}
+
+.story__aside {
+  grid-column: 2 / 7;
+  grid-row: 4;
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+}
+
+.hour {
+  display: grid;
+  min-height: 100svh;
+  align-items: center;
+  padding: clamp(100px, 13vh, 160px) var(--gutter);
+  background: var(--red);
+  color: var(--paper);
+}
+
+.hour__layout {
+  display: grid;
+  width: min(100%, 1440px);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: center;
+  column-gap: clamp(18px, 3vw, 48px);
+  margin-inline: auto;
+}
+
+.hour__copy {
+  grid-column: 1 / 6;
+}
+
+.hour__copy h2 {
+  max-width: 8ch;
+}
+
+.hour__lead {
+  max-width: 26ch;
+}
+
+.hour__detail {
+  min-height: 1.6em;
+  margin-top: 28px;
+  font-size: var(--size-body);
+}
+
+.hour-index {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 11px;
+  margin-top: 26px;
+}
+
+.hour-index__item {
+  display: block;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  color: var(--pink-paper);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 4.4vw, 4.2rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+  text-align: left;
+  transition: color 180ms ease, transform 220ms ease;
+}
+
+.hour-index__item:hover,
+.hour-index__item:focus-visible,
+.hour-index__item.is-active {
+  color: var(--paper);
+}
+
+.hour-index__item:hover {
+  transform: translateX(8px);
+}
+
+.hour-index__preview {
+  display: none;
+}
+
+.hour__visual {
+  position: sticky;
+  top: 10svh;
+  grid-column: 7 / 13;
+  align-self: center;
+}
+
+.hour-preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.2;
+  overflow: hidden;
+  background: var(--night);
+  isolation: isolate;
+}
+
+.hour-preview::before {
+  position: absolute;
+  z-index: -1;
+  inset: -2%;
+  background-image: url("/images/kage-ronin.jpg");
+  background-position: center 54%;
+  background-size: cover;
+  content: "";
+  transition: filter 420ms ease, transform 7s ease;
+}
+
+.hour-preview--dusk::before {
+  filter: saturate(1.06) contrast(1.02);
+}
+
+.hour-preview--ember::before {
+  filter: saturate(1.4) sepia(0.16) contrast(1.05) brightness(1.04);
+  transform: scale(1.04);
+}
+
+.hour-preview--night::before {
+  filter: hue-rotate(158deg) saturate(0.78) brightness(0.7) contrast(1.08);
+  transform: scale(1.07);
+}
+
+.hour-preview__caption {
+  position: absolute;
+  right: 22px;
+  bottom: 18px;
+  left: 22px;
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: var(--size-head);
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.hour__credit {
+  margin-top: 14px;
+  color: var(--paper);
+  font-size: var(--size-small);
+}
+
+.closing-band {
+  position: relative;
+  display: grid;
+  min-height: 90svh;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr;
+  align-items: start;
+  padding: 32px var(--gutter) 28px;
+  overflow: hidden;
+  background: var(--red-bright);
+  color: var(--paper);
+  text-decoration: none;
+  transition: background-color 220ms ease, color 220ms ease;
+}
+
+.closing-band:hover,
+.closing-band:focus-visible {
+  background: var(--paper);
+  color: var(--red);
+}
+
+.closing-band__note {
+  max-width: 34ch;
+  align-self: start;
+  font-size: var(--size-lead);
+  line-height: 1.35;
+}
+
+.closing-band__arrow {
+  display: grid;
+  width: 60px;
+  height: 60px;
+  place-items: center;
+}
+
+.closing-band__arrow svg {
+  width: 42px;
+  height: 42px;
+}
+
+.closing-band__word {
+  align-self: end;
+  grid-column: 1 / -1;
+  color: currentColor;
+  font-size: clamp(5rem, 21vw, 20rem);
+  letter-spacing: -0.07em;
+  line-height: 0.8;
+  text-transform: uppercase;
+}
+
+.site-footer {
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px var(--gutter) 24px;
+  background: var(--night);
+  color: var(--paper);
+}
+
+.site-footer__top {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.site-footer__note {
+  max-width: 30ch;
+  grid-column: 1 / 6;
+  font-size: var(--size-lead);
+  line-height: 1.4;
+}
+
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  grid-column: 8 / 11;
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+}
+
+.site-footer__bottom {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: end;
+  column-gap: 24px;
+}
+
+.site-footer__wordmark {
+  grid-column: 1 / 9;
+  color: var(--paper);
+  font-size: clamp(5rem, 14vw, 13rem);
+  letter-spacing: -0.065em;
+  line-height: 0.82;
+}
+
+.site-footer__return {
+  display: flex;
+  min-height: 88px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  grid-column: 10 / 13;
+  padding: 19px 0 19px 20px;
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  text-decoration: none;
+}
+
+.site-footer__return svg {
+  color: var(--red-bright);
+  transform: rotate(-45deg);
+  transition: transform 180ms ease;
+}
+
+.site-footer__return:hover svg {
+  transform: translateY(-5px) rotate(-45deg);
+}
+
+.has-js [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 640ms ease var(--reveal-delay, 0ms),
+    transform 640ms cubic-bezier(0.2, 0.72, 0.24, 1) var(--reveal-delay, 0ms);
+}
+
+.has-js [data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.static-fallback {
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 15vh var(--gutter) 14vh;
+  background-color: var(--night);
+  background-image: url("/images/kage-ronin.jpg");
+  background-position: center;
+  background-size: cover;
+}
+
+.static-fallback__mark {
+  margin-bottom: auto;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+}
+
+.static-fallback h1 {
+  max-width: 7ch;
+  font-size: clamp(4rem, 13vw, 9rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.static-fallback > p:not(.static-fallback__mark) {
+  max-width: 36ch;
+  margin-top: 20px;
+  font-size: var(--size-lead);
+}
+
+.static-fallback a {
+  width: fit-content;
+  margin-top: 24px;
+}
+
+.static-story {
+  min-height: 90svh;
+  padding: 14vh var(--gutter);
+  background: var(--blue);
+}
+
+.static-story h2 {
+  margin-bottom: 26px;
+  font-size: var(--size-head);
+}
+
+.static-story p {
+  max-width: 55ch;
+}
+
+@keyframes horizon-drift {
+  from {
+    transform: scale(1.05) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: scale(1.12) translate3d(-0.4%, 0.3%, 0);
+  }
+}
+
+@media (max-width: 880px) {
+  .story__layout {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  .story__heading {
+    grid-column: 1 / 7;
+  }
+
+  .story__art {
+    grid-column: 1 / 5;
+  }
+
+  .story__narrative {
+    grid-column: 5 / 9;
+  }
+
+  .story__aside {
+    grid-column: 1 / 5;
+  }
+
+  .hour__layout {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  .hour__copy {
+    grid-column: 1 / 5;
+  }
+
+  .hour__visual {
+    grid-column: 5 / 9;
+  }
+
+  .site-footer__note {
+    grid-column: 1 / 7;
+  }
+
+  .footer-nav {
+    grid-column: 7 / 10;
+  }
+
+  .site-footer__wordmark {
+    grid-column: 1 / 8;
+  }
+
+  .site-footer__return {
+    grid-column: 9 / 13;
+  }
+}
+
+@media (max-width: 680px) {
+  :root {
+    --gutter: 22px;
+  }
+
+  .site-header {
+    padding-top: 19px;
+    padding-bottom: 19px;
+  }
+
+  .wordmark {
+    font-size: 1.05rem;
+  }
+
+  .top-nav {
+    gap: 18px;
+    font-size: 0.875rem;
+  }
+
+  .hero {
+    min-height: max(720px, 100svh);
+  }
+
+  .hero__art {
+    inset: -2%;
+    background-position: center 51%;
+  }
+
+  .hero__copy {
+    top: 13%;
+    right: var(--gutter);
+    left: var(--gutter);
+    width: auto;
+    text-align: center;
+  }
+
+  .hero__title {
+    max-width: none;
+    align-items: center;
+    font-size: clamp(4rem, 15vw, 5.8rem);
+    line-height: 0.88;
+  }
+
+  .hero__description {
+    max-width: 31ch;
+    margin: 20px auto 0;
+    font-size: clamp(1.125rem, 4.7vw, 1.375rem);
+  }
+
+  .folder-stack {
+    top: 49%;
+    width: calc(100% - 2 * var(--gutter));
+    height: 300px;
+  }
+
+  .folder {
+    min-height: 82px;
+    padding: 19px 19px 16px;
+  }
+
+  .folder--hour {
+    top: 58px;
+  }
+
+  .folder--read {
+    top: 116px;
+    min-height: 174px;
+  }
+
+  .folder__tab {
+    top: -23px;
+    left: 19px;
+    min-width: 100px;
+    padding-inline: 14px;
+  }
+
+  .folder__label {
+    font-size: clamp(1.125rem, 4.5vw, 1.4rem);
+  }
+
+  .folder__hint {
+    font-size: 0.875rem;
+  }
+
+  .folder__action {
+    min-width: 116px;
+    gap: 12px;
+    padding: 13px 15px;
+    font-size: 1rem;
+  }
+
+  .folder__action svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .story,
+  .hour {
+    min-height: 100svh;
+    padding: 100px var(--gutter) 86px;
+  }
+
+  .story__layout {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    row-gap: 25px;
+  }
+
+  .story__heading {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .story__heading h2,
+  .hour__copy h2 {
+    max-width: 11ch;
+    font-size: clamp(2.8rem, 12vw, 4.2rem);
+  }
+
+  .story__lead,
+  .hour__lead {
+    margin-top: 18px;
+    font-size: 1.25rem;
+  }
+
+  .story__art {
+    width: min(100%, 390px);
+    aspect-ratio: 1.08;
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .story__narrative {
+    gap: 18px;
+    grid-column: 1 / -1;
+    grid-row: 3;
+    padding-top: 0;
+  }
+
+  .story__narrative p {
+    max-width: 55ch;
+    font-size: var(--size-body);
+  }
+
+  .story__aside {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    margin-top: 0;
+  }
+
+  .hour__layout {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 38px;
+  }
+
+  .hour__copy h2 {
+    max-width: 8ch;
+  }
+
+  .hour__detail {
+    min-height: 0;
+    margin-top: 22px;
+  }
+
+  .hour-index {
+    gap: 19px;
+    margin-top: 25px;
+  }
+
+  .hour-index__item {
+    font-size: clamp(2.25rem, 9vw, 3.3rem);
+  }
+
+  .hour-index__preview {
+    display: none;
+    width: 100%;
+    aspect-ratio: 1.6;
+    margin-top: 13px;
+    background-image: url("/images/kage-ronin.jpg");
+    background-position: center 55%;
+    background-size: cover;
+  }
+
+  .hour-index__item[aria-pressed="true"] .hour-index__preview {
+    display: block;
+  }
+
+  .hour-index__preview[data-hour="ember"] {
+    filter: saturate(1.4) sepia(0.16) contrast(1.05) brightness(1.04);
+  }
+
+  .hour-index__preview[data-hour="night"] {
+    filter: hue-rotate(158deg) saturate(0.78) brightness(0.7) contrast(1.08);
+  }
+
+  .hour__visual {
+    display: none;
+  }
+
+  .closing-band {
+    min-height: 90svh;
+    padding-top: 25px;
+    padding-bottom: 23px;
+  }
+
+  .closing-band__note {
+    max-width: 26ch;
+    font-size: 1.25rem;
+  }
+
+  .closing-band__arrow {
+    width: 45px;
+    height: 45px;
+  }
+
+  .closing-band__arrow svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .closing-band__word {
+    font-size: clamp(5rem, 21vw, 9rem);
+  }
+
+  .site-footer {
+    min-height: 90svh;
+    padding-top: 28px;
+    padding-bottom: 20px;
+  }
+
+  .site-footer__top {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px 18px;
+  }
+
+  .site-footer__note {
+    max-width: 26ch;
+    grid-column: 1 / -1;
+    font-size: 1.2rem;
+  }
+
+  .footer-nav {
+    grid-column: 1 / 4;
+    gap: 9px;
+  }
+
+  .site-footer__bottom {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .site-footer__wordmark {
+    grid-column: 1 / -1;
+    font-size: clamp(5rem, 20vw, 8rem);
+  }
+
+  .site-footer__return {
+    min-height: 56px;
+    grid-column: 1 / -1;
+    padding: 4px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .has-js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
