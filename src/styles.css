@@ -91,8 +91,41 @@ p {
 }
 
 .site-shell {
+  --scene-filter: saturate(1.06) contrast(1.02);
   position: relative;
   overflow: clip;
+}
+
+.site-shell[data-hour="ember"] {
+  --blue: #2c2528;
+  --red: #a82d18;
+  --red-bright: #cc412a;
+  --pink-paper: #ffeadf;
+  --scene-filter: saturate(1.25) sepia(0.16) contrast(1.05) brightness(1.04);
+}
+
+.site-shell[data-hour="night"] {
+  --night: #07151f;
+  --blue: #142932;
+  --red: #193748;
+  --red-bright: #244d61;
+  --pink-paper: #d4edf6;
+  --scene-filter: hue-rotate(158deg) saturate(0.78) brightness(0.7) contrast(1.08);
+}
+
+.story,
+.hour,
+.closing-band,
+.site-footer {
+  transition: background-color 420ms ease;
+}
+
+.hero__art,
+.story__art-image,
+.closing-band__still,
+.site-footer__still {
+  filter: var(--scene-filter);
+  transition: filter 420ms ease;
 }
 
 .skip-link {
@@ -209,6 +242,35 @@ p {
   color: var(--paper);
   font-size: var(--size-lead);
   line-height: 1.4;
+}
+
+.hero-hours {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.hero-hours button {
+  min-height: 44px;
+  padding: 8px 0;
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 7px;
+  transition: color 180ms ease;
+}
+
+.hero-hours button:hover,
+.hero-hours button[aria-pressed="true"] {
+  text-decoration-line: underline;
+}
+
+.hero-hours button:hover {
+  color: var(--pink-paper);
 }
 
 .folder-stack {
@@ -491,20 +553,15 @@ p {
   height: 104%;
   object-fit: cover;
   object-position: center 54%;
+  filter: var(--scene-filter);
   transition: filter 420ms ease, transform 7s ease;
 }
 
-.hour-preview--dusk .hour-preview__image {
-  filter: saturate(1.06) contrast(1.02);
-}
-
 .hour-preview--ember .hour-preview__image {
-  filter: saturate(1.4) sepia(0.16) contrast(1.05) brightness(1.04);
   transform: scale(1.04);
 }
 
 .hour-preview--night .hour-preview__image {
-  filter: hue-rotate(158deg) saturate(0.78) brightness(0.7) contrast(1.08);
   transform: scale(1.07);
 }
 
@@ -889,6 +946,11 @@ p {
     max-width: 31ch;
     margin: 20px auto 0;
     font-size: var(--size-lead);
+  }
+
+  .hero-hours {
+    justify-content: center;
+    margin-top: 12px;
   }
 
   .folder-stack {

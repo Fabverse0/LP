@@ -6,17 +6,17 @@ const hours = [
   {
     id: "dusk",
     label: "Senja",
-    description: "Warna asli dari artwork yang diberikan.",
+    description: "Merah terakhir masih tertahan di atas ladang.",
   },
   {
     id: "ember",
     label: "Sisa bara",
-    description: "Merah bertahan lebih lama di atas ladang.",
+    description: "Bara di cakrawala membuat rumput tampak menyala.",
   },
   {
     id: "night",
     label: "Malam",
-    description: "Cakrawala berubah dingin, sosoknya tetap terlihat.",
+    description: "Langit mendingin. Jalan di depan berwarna biru.",
   },
 ];
 
@@ -70,7 +70,7 @@ function App() {
   useSectionReveal();
 
   return (
-    <div className="site-shell">
+    <div className="site-shell" data-hour={activeHour}>
       <a className="skip-link" href="#main">
         Langsung ke konten
       </a>
@@ -100,6 +100,18 @@ function App() {
             <p className="hero__description" data-reveal>
               Kisah fiktif seorang ronin di bawah matahari merah.
             </p>
+            <div className="hero-hours" role="group" aria-label="Pilih suasana halaman">
+              {hours.map((hour) => (
+                <button
+                  type="button"
+                  key={hour.id}
+                  aria-pressed={activeHour === hour.id}
+                  onClick={() => setActiveHour(hour.id)}
+                >
+                  {hour.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <nav className="folder-stack" aria-label="Bab cerita">
@@ -162,7 +174,7 @@ function App() {
                 Ubah suasana
               </h2>
               <p className="hour__lead" data-reveal>
-                Lihat artwork yang sama pada jam yang berbeda.
+                Pilih suasana untuk seluruh perjalanan.
               </p>
               <p className="hour__detail" aria-live="polite" aria-atomic="true">
                 {selectedHour.description}
@@ -175,8 +187,6 @@ function App() {
                     type="button"
                     aria-pressed={activeHour === hour.id}
                     key={hour.id}
-                    onPointerEnter={() => setActiveHour(hour.id)}
-                    onFocus={() => setActiveHour(hour.id)}
                     onClick={() => setActiveHour(hour.id)}
                   >
                     <span className="hour-index__label">{hour.label}</span>
