@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import HeroScene from "./components/HeroScene.jsx";
+import ChapterReader from "./components/ChapterReader.jsx";
 
 const artwork = "/images/kage-ronin-4k.webp";
 
@@ -66,6 +67,7 @@ function ArrowMark() {
 
 function App() {
   const [activeHour, setActiveHour] = useState("dusk");
+  const [readerOpen, setReaderOpen] = useState(false);
   const selectedHour = hours.find((hour) => hour.id === activeHour) ?? hours[0];
 
   useSectionReveal();
@@ -120,11 +122,18 @@ function App() {
               <span className="folder__tab">Suasana</span>
               <span className="folder__label">Ubah suasana</span>
             </a>
-            <a className="folder folder--read" href="#story" data-reveal>
+            <button
+              className="folder folder--read"
+              type="button"
+              onClick={() => setReaderOpen(true)}
+              aria-haspopup="dialog"
+              aria-controls="chapter-reader"
+              data-reveal
+            >
               <span className="folder__tab">Kage</span>
               <span className="folder__label">Masuki kisah</span>
               <span className="folder__action">Baca <ArrowMark /></span>
-            </a>
+            </button>
           </nav>
         </section>
 
@@ -157,6 +166,15 @@ function App() {
                 Tak ada panji yang menunggu. Tak ada suara yang memanggilnya pulang. Yang tersisa
                 hanya jalan di hadapan dan keputusan untuk terus melangkah.
               </p>
+              <button
+                className="story__read"
+                type="button"
+                onClick={() => setReaderOpen(true)}
+                aria-haspopup="dialog"
+                aria-controls="chapter-reader"
+              >
+                Baca bab pertama <ArrowMark />
+              </button>
             </div>
             <p className="story__aside" data-reveal>
               Sosok kecil. Cakrawala yang luas.
@@ -209,7 +227,14 @@ function App() {
           </div>
         </section>
 
-        <a className="closing-band" href="#story" aria-label="Baca kembali kisah Kage">
+        <button
+          className="closing-band"
+          type="button"
+          onClick={() => setReaderOpen(true)}
+          aria-label="Baca bab pertama: Jalan tanpa tuan"
+          aria-haspopup="dialog"
+          aria-controls="chapter-reader"
+        >
           <span className="closing-band__note" data-reveal>
             Kembali ke jalan yang sama.
           </span>
@@ -222,10 +247,10 @@ function App() {
             alt="Cakrawala merah dan siluet ronin, dipotong lebih dekat."
             data-reveal
           />
-          <h2 className="closing-band__word" data-reveal>
+          <span className="closing-band__word" data-reveal>
             Baca
-          </h2>
-        </a>
+          </span>
+        </button>
       </main>
 
       <footer className="site-footer" id="ending">
@@ -261,6 +286,12 @@ function App() {
           </a>
         </div>
       </footer>
+      <ChapterReader
+        isOpen={readerOpen}
+        onClose={() => setReaderOpen(false)}
+        artwork={artwork}
+        atmosphere={selectedHour.label}
+      />
     </div>
   );
 }
