@@ -168,7 +168,7 @@ p {
   position: absolute;
   z-index: -2;
   inset: -4%;
-  background-image: url("/images/kage-ronin.jpg");
+  background-image: url("/images/kage-ronin-4k.webp");
   background-position: center 52%;
   background-size: cover;
   animation: horizon-drift 24s ease-in-out infinite alternate;
@@ -693,7 +693,7 @@ p {
   justify-content: flex-end;
   padding: 15vh var(--gutter) 14vh;
   background-color: var(--night);
-  background-image: url("/images/kage-ronin.jpg");
+  background-image: url("/images/kage-ronin-4k.webp");
   background-position: center;
   background-size: cover;
 }

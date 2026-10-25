@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const artwork = "/images/kage-ronin.jpg";
+const artwork = "/images/kage-ronin-4k.webp";
 
 const hours = [
   {
