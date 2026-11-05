@@ -14,6 +14,7 @@ import ChapterIndex from "./components/ChapterIndex.jsx";
 import SiteHeader from "./components/SiteHeader.jsx";
 import ScrollProgress from "./components/ScrollProgress.jsx";
 import BackToTop from "./components/BackToTop.jsx";
+import Newsletter from "./components/Newsletter.jsx";
 import { readLastChapterId } from "./content/chapters.js";
 
 const artwork = "/images/kage-ronin-4k.webp";
@@ -336,6 +337,8 @@ function App() {
         <JourneyMap />
 
         <Gallery />
+
+        <Newsletter />
 
         <button
           className="closing-band"
