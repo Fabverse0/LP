@@ -34,7 +34,7 @@
 }
 
 .storyboard__heading {
-  max-width: 10ch;
+  max-width: 12ch;
   font-size: var(--size-head);
   line-height: 0.9;
   letter-spacing: -0.045em;
@@ -155,12 +155,13 @@
 }
 
 .storyboard__img {
+  /* Lukisan sumber punya bilah letterbox ~5.5% atas-bawah: dipotong di sini. */
   position: absolute;
-  top: 0;
+  top: -7%;
   left: -17%;
   display: block;
   width: 134%;
-  height: 100%;
+  height: 114%;
   object-fit: cover;
   filter: var(--scene-filter);
 }
