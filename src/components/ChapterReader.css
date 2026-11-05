@@ -12,6 +12,15 @@
   border: 0;
   background: var(--night);
   color: var(--paper);
+  --reader-scale: 1;
+}
+
+.reader--text-small {
+  --reader-scale: 0.88;
+}
+
+.reader--text-large {
+  --reader-scale: 1.18;
 }
 
 .reader::backdrop {
@@ -54,11 +63,36 @@
   text-transform: uppercase;
 }
 
+.reader__sizes {
+  display: flex;
+  margin-left: auto;
+  margin-right: 16px;
+}
+
+.reader__size {
+  display: inline-grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+  font-size: calc(var(--size-body) * var(--glyph-scale, 1));
+  font-weight: 700;
+  line-height: 1;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.reader__size:hover,
+.reader__size[aria-pressed="true"] {
+  background: var(--paper);
+  color: var(--night);
+}
+
 .reader__nav {
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-left: auto;
   margin-right: 16px;
 }
 
@@ -174,7 +208,7 @@
 .reader__prose {
   max-width: 60ch;
   margin-inline: auto;
-  font-size: 1.25rem;
+  font-size: calc(1.25rem * var(--reader-scale));
   line-height: 1.85;
 }
 
@@ -293,9 +327,36 @@ button.reader__turn:hover {
     aspect-ratio: 1.35;
   }
 
+  .reader__brand {
+    display: none;
+  }
+
+  .reader__sizes {
+    margin-right: 4px;
+  }
+
+  .reader__count {
+    display: none;
+  }
+
   .reader__prose {
-    font-size: var(--size-body);
+    font-size: calc(var(--size-body) * var(--reader-scale));
     line-height: 1.8;
+  }
+}
+
+@media (max-width: 420px) {
+  .reader__close {
+    padding: 8px 10px;
+  }
+
+  .reader__close-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 

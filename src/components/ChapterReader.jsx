@@ -14,6 +14,30 @@ function ordinal(number) {
   return ordinals[number - 1] ?? `ke-${number}`;
 }
 
+const TEXT_SIZE_KEY = "kage:text-size";
+const textSizes = [
+  { id: "small", label: "Teks kecil", glyph: "A", scale: 0.8 },
+  { id: "medium", label: "Teks sedang", glyph: "A", scale: 1 },
+  { id: "large", label: "Teks besar", glyph: "A", scale: 1.25 },
+];
+
+function readTextSize() {
+  try {
+    const stored = window.localStorage.getItem(TEXT_SIZE_KEY);
+    return textSizes.some((size) => size.id === stored) ? stored : "medium";
+  } catch {
+    return "medium";
+  }
+}
+
+function storeTextSize(size) {
+  try {
+    window.localStorage.setItem(TEXT_SIZE_KEY, size);
+  } catch {
+    // Storage can be unavailable (private mode); the choice simply won't persist.
+  }
+}
+
 function resolveChapterId(id) {
   const chapter = getChapter(id);
   return chapter?.status === "available" ? chapter.id : availableChapters[0].id;
@@ -46,6 +70,7 @@ export default function ChapterReader({
   const frame = useRef(0);
   const [currentId, setCurrentId] = useState(() => resolveChapterId(chapterId));
   const [requested, setRequested] = useState(null);
+  const [textSize, setTextSize] = useState(readTextSize);
 
   // Sync to the requested chapter while rendering, so effects never see a stale chapter on open.
   const request = isOpen ? chapterId ?? "" : null;
@@ -109,6 +134,12 @@ export default function ChapterReader({
     }
   }, [currentId, isOpen]);
 
+  function chooseTextSize(size) {
+    setTextSize(size);
+    storeTextSize(size);
+    scheduleProgress();
+  }
+
   function goTo(target) {
     if (!target) return;
     navigated.current = true;
@@ -153,7 +184,7 @@ export default function ChapterReader({
     <dialog
       ref={dialog}
       id="chapter-reader"
-      className="reader"
+      className={`reader reader--text-${textSize}`}
       aria-labelledby="reader-title"
       aria-describedby="reader-intro"
       onClose={onClose}
@@ -170,6 +201,21 @@ export default function ChapterReader({
           <span className="reader__progress-fill" ref={progress} />
         </span>
         <span className="reader__brand">Kage</span>
+        <div className="reader__sizes" role="group" aria-label="Ukuran teks">
+          {textSizes.map((size) => (
+            <button
+              key={size.id}
+              className="reader__size"
+              type="button"
+              aria-label={size.label}
+              aria-pressed={textSize === size.id}
+              onClick={() => chooseTextSize(size.id)}
+              style={{ "--glyph-scale": size.scale }}
+            >
+              <span aria-hidden="true">{size.glyph}</span>
+            </button>
+          ))}
+        </div>
         <nav className="reader__nav" aria-label="Navigasi bab">
           <button
             className="reader__step"
@@ -194,7 +240,7 @@ export default function ChapterReader({
           </button>
         </nav>
         <button className="reader__close" type="button" onClick={onClose} autoFocus>
-          Tutup
+          <span className="reader__close-label">Tutup</span>
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
             <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeWidth="2" />
           </svg>
