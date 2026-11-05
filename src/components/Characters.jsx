@@ -1,9 +1,30 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { characters } from "../content/world.js";
 import "./Characters.css";
 
+const KEY_STEPS = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+
 export default function Characters() {
   const [activeId, setActiveId] = useState(characters[0].id);
+  const tabs = useRef([]);
+
+  function handleKeyDown(event) {
+    const current = characters.findIndex((person) => person.id === activeId);
+    let next = null;
+
+    if (event.key in KEY_STEPS) {
+      next = (current + KEY_STEPS[event.key] + characters.length) % characters.length;
+    } else if (event.key === "Home") {
+      next = 0;
+    } else if (event.key === "End") {
+      next = characters.length - 1;
+    }
+
+    if (next === null) return;
+    event.preventDefault();
+    setActiveId(characters[next].id);
+    tabs.current[next]?.focus();
+  }
 
   return (
     <section className="characters" id="characters" aria-labelledby="characters-title">
@@ -13,12 +34,17 @@ export default function Characters() {
           <h2 id="characters-title">Empat orang di satu jalan</h2>
         </header>
 
-        <div className="characters__list" role="tablist" aria-label="Pilih tokoh" aria-orientation="vertical">
+        <div className="characters__list" role="tablist" aria-label="Pilih tokoh" aria-orientation="vertical"
+          onKeyDown={handleKeyDown}
+        >
           {characters.map((person, index) => {
             const selected = person.id === activeId;
             return (
               <button
                 key={person.id}
+                ref={(node) => {
+                  tabs.current[index] = node;
+                }}
                 type="button"
                 role="tab"
                 id={`character-tab-${person.id}`}
