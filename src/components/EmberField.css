@@ -1,0 +1,17 @@
+/* Sits inside .hero (an isolated stacking context): above .hero__art (z -2),
+   below the hero copy and folders. */
+.ember-field {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ember-field {
+    display: none;
+  }
+}
