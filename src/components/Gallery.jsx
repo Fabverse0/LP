@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Gallery.css";
 
 const RONIN = "/images/kage-ronin-4k.webp";
@@ -90,7 +90,143 @@ export function FrameImage({ frame, className, loading = "lazy" }) {
   );
 }
 
+const SWIPE_DISTANCE = 48;
+
+const aspectRatio = (aspect) => {
+  const [width, height] = aspect.split("/").map(Number);
+  return width / height;
+};
+
+function Lightbox({ index, onNavigate, onClose, returnFocus }) {
+  const dialog = useRef(null);
+  const swipe = useRef(null);
+  const isOpen = index !== null;
+  const frame = isOpen ? frames[index] : null;
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const element = dialog.current;
+    // Safari does not focus buttons on click, so the opener is passed in explicitly.
+    const trigger = returnFocus.current ?? document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    if (!element.open) element.showModal();
+
+    return () => {
+      if (element.open) element.close();
+      document.body.style.overflow = previousOverflow;
+      if (trigger instanceof HTMLElement && trigger.isConnected) {
+        trigger.focus({ preventScroll: true });
+      }
+    };
+  }, [isOpen]);
+
+  function step(direction) {
+    onNavigate((index + direction + frames.length) % frames.length);
+  }
+
+  function onKeyDown(event) {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      step(-1);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      step(1);
+    }
+  }
+
+  function onPointerDown(event) {
+    if (event.pointerType === "mouse") return;
+    swipe.current = { x: event.clientX, y: event.clientY };
+  }
+
+  function onPointerUp(event) {
+    const start = swipe.current;
+    swipe.current = null;
+    if (!start) return;
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    if (Math.abs(dx) > SWIPE_DISTANCE && Math.abs(dx) > Math.abs(dy) * 1.4) {
+      step(dx < 0 ? 1 : -1);
+    }
+  }
+
+  return (
+    <dialog
+      ref={dialog}
+      className="gallery-lightbox"
+      aria-labelledby="gallery-lightbox-caption"
+      onKeyDown={onKeyDown}
+      onClose={onClose}
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+      onClick={(event) => {
+        // A click on the backdrop lands on the <dialog> element itself.
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      {frame && (
+        <div className="gallery-lightbox__body">
+          <header className="gallery-lightbox__bar">
+            <span className="gallery-lightbox__count">
+              {frameNumber(index)} <span aria-hidden="true">/</span>
+              <span className="gallery-lightbox__sr"> dari </span> {frameNumber(frames.length - 1)}
+            </span>
+            <button className="gallery-lightbox__close" type="button" onClick={onClose} autoFocus>
+              Tutup
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" strokeWidth="2.2" />
+              </svg>
+            </button>
+          </header>
+
+          <figure className="gallery-lightbox__figure">
+            <div
+              className="gallery-lightbox__frame"
+              style={{ aspectRatio: frame.aspect, "--gallery-ratio": aspectRatio(frame.aspect) }}
+              onPointerDown={onPointerDown}
+              onPointerUp={onPointerUp}
+              onPointerCancel={() => { swipe.current = null; }}
+            >
+              <FrameImage
+                key={frame.id}
+                frame={frame}
+                className="gallery__image gallery-lightbox__image"
+                loading="eager"
+              />
+            </div>
+            <figcaption id="gallery-lightbox-caption" className="gallery-lightbox__caption">
+              <span className="gallery__number">{frame.label}</span>
+              <span>{frame.caption}</span>
+            </figcaption>
+          </figure>
+
+          <nav className="gallery-lightbox__nav" aria-label="Navigasi bingkai">
+            <button type="button" className="gallery-lightbox__step" onClick={() => step(-1)}>
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                <path d="M20 12H5M11 6l-6 6 6 6" stroke="currentColor" strokeWidth="2.2" />
+              </svg>
+              Sebelumnya
+            </button>
+            <button type="button" className="gallery-lightbox__step" onClick={() => step(1)}>
+              Berikutnya
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                <path d="M4 12h15M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.2" />
+              </svg>
+            </button>
+          </nav>
+        </div>
+      )}
+    </dialog>
+  );
+}
+
 export default function Gallery() {
+  const [openIndex, setOpenIndex] = useState(null);
+  const opener = useRef(null);
+
   return (
     <section id="gallery" className="gallery" aria-labelledby="gallery-title">
       <div className="gallery__inner">
@@ -109,9 +245,19 @@ export default function Gallery() {
               className={`gallery__item gallery__item--${frame.id}`}
             >
               <figure className="gallery__figure">
-                <span className="gallery__frame" style={{ aspectRatio: frame.aspect }}>
+                <button
+                  type="button"
+                  className="gallery__frame"
+                  style={{ aspectRatio: frame.aspect }}
+                  aria-haspopup="dialog"
+                  aria-label={`Buka bingkai ${frameNumber(index)}: ${frame.label}`}
+                  onClick={(event) => {
+                    opener.current = event.currentTarget;
+                    setOpenIndex(index);
+                  }}
+                >
                   <FrameImage frame={frame} className="gallery__image" />
-                </span>
+                </button>
                 <figcaption className="gallery__caption">
                   <span className="gallery__number">{frameNumber(index)}</span>
                   <span className="gallery__text">{frame.caption}</span>
@@ -121,6 +267,13 @@ export default function Gallery() {
           ))}
         </ol>
       </div>
+
+      <Lightbox
+        index={openIndex}
+        onNavigate={setOpenIndex}
+        onClose={() => setOpenIndex(null)}
+        returnFocus={opener}
+      />
     </section>
   );
 }
