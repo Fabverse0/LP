@@ -82,17 +82,40 @@ export default function Storyboard() {
     let visible = false;
     let pinned = false;
 
+    let lastX = null;
+    let speed = 0;
+
+    const items = () => Array.from(rail.querySelectorAll(".storyboard__item"));
+
     const measure = () => {
-      distance = Math.max(0, rail.scrollWidth - window.innerWidth);
+      const width = window.innerWidth;
+      distance = Math.max(0, rail.scrollWidth - width);
       root.style.height = `${Math.round(distance + window.innerHeight)}px`;
+      // --o: posisi rel saat panel tepat di tengah layar (untuk paralaks dalam CSS).
+      items().forEach((item) => {
+        const center = item.offsetLeft - (width - item.offsetWidth) / 2;
+        item.style.setProperty("--o", center.toFixed(1));
+      });
     };
 
     const update = () => {
       ticking = false;
       const top = root.getBoundingClientRect().top;
       const x = Math.min(distance, Math.max(0, -top));
+
+      // Kecepatan dihaluskan lalu dijepit ke -1..1 untuk miring/skala panel.
+      speed = speed * 0.82 + (lastX === null ? 0 : x - lastX) * 0.18;
+      lastX = x;
+      if (Math.abs(speed) < 0.02) speed = 0;
+      const velocity = Math.max(-1, Math.min(1, speed / 40));
+
       root.style.setProperty("--x", x.toFixed(1));
       root.style.setProperty("--p", distance > 0 ? (x / distance).toFixed(4) : "0");
+      root.style.setProperty("--v", velocity.toFixed(3));
+      root.style.setProperty("--va", Math.abs(velocity).toFixed(3));
+
+      // Biarkan miring meluruh kembali ke nol setelah gulir berhenti.
+      if (speed !== 0 && listening) request();
     };
 
     const request = () => {
@@ -132,7 +155,10 @@ export default function Storyboard() {
         window.removeEventListener("resize", resize);
         listen(false);
         root.style.removeProperty("height");
-        ["--x", "--p"].forEach((name) => root.style.removeProperty(name));
+        ["--x", "--p", "--v", "--va"].forEach((name) => root.style.removeProperty(name));
+        items().forEach((item) => item.style.removeProperty("--o"));
+        lastX = null;
+        speed = 0;
       }
     };
 

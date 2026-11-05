@@ -226,8 +226,21 @@
   padding: calc(var(--gutter) * 2.4) calc(var(--gutter) * 1.6);
 }
 
+/* Panel miring sedikit mengikuti kecepatan gulir (dijepit di JS). */
+.storyboard.is-pinned .storyboard__panel {
+  transform: skewX(calc(var(--v) * -3deg)) scale(calc(1 - var(--va) * 0.05));
+  transform-origin: 50% 50%;
+}
+
 .storyboard.is-pinned .storyboard__num {
   font-size: min(24vw, 42vh);
+  transform: translate3d(calc((var(--x) - var(--o, 0)) * -0.06px), 0, 0);
+}
+
+/* Gambar bergerak berlawanan arah rel, lebih lambat: kedalaman. */
+.storyboard.is-pinned .storyboard__img {
+  transform: translate3d(calc((var(--x) - var(--o, 0)) * 0.07px), 0, 0)
+    scale(calc(1.02 + var(--va) * 0.05));
 }
 
 .storyboard.is-pinned .storyboard__title {
