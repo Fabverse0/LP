@@ -400,8 +400,9 @@ function App() {
             alt="Cakrawala merah dan siluet ronin, dipotong lebih dekat."
             data-reveal
           />
-          <span className="closing-band__word" data-reveal>
-            Baca
+          <span className="closing-band__word" data-text="Baca" data-reveal>
+            <span className="closing-band__word-base">Baca</span>
+            <span className="closing-band__slash" aria-hidden="true" />
           </span>
         </button>
       </main>
