@@ -11,9 +11,18 @@ import FilmGrain from "./components/FilmGrain.jsx";
 import AmbientSound from "./components/AmbientSound.jsx";
 import Gallery from "./components/Gallery.jsx";
 import ChapterIndex from "./components/ChapterIndex.jsx";
+import SiteHeader from "./components/SiteHeader.jsx";
 import { readLastChapterId } from "./content/chapters.js";
 
 const artwork = "/images/kage-ronin-4k.webp";
+
+const navLinks = [
+  { href: "#story", label: "Kisah" },
+  { href: "#chapters", label: "Bab" },
+  { href: "#characters", label: "Tokoh" },
+  { href: "#world", label: "Dunia" },
+  { href: "#gallery", label: "Bingkai" },
+];
 
 const hours = [
   {
@@ -171,15 +180,7 @@ function App() {
         Langsung ke konten
       </a>
 
-      <header className="site-header">
-        <a className="wordmark" href="#top" aria-label="Kage, kembali ke awal">
-          Kage
-        </a>
-        <nav className="top-nav" aria-label="Navigasi utama">
-          <a href="#story">Kisah</a>
-          <a href="#hour">Suasana</a>
-        </nav>
-      </header>
+      <SiteHeader links={navLinks} onRead={openReader} readControls="chapter-reader" />
 
       <main id="main">
         <section className="hero" id="top" aria-labelledby="hero-title">
