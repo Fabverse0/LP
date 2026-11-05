@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { availableChapters, chapters, getChapter } from "../content/chapters.js";
+import { availableChapters, chapters, getChapter, rememberLastChapter } from "../content/chapters.js";
 import "./ChapterReader.css";
 
 const ordinals = ["pertama", "kedua", "ketiga", "keempat", "kelima", "keenam", "ketujuh"];
@@ -37,16 +37,20 @@ export default function ChapterReader({
   const title = useRef(null);
   const navigated = useRef(false);
   const [currentId, setCurrentId] = useState(() => resolveChapterId(chapterId));
+  const [requested, setRequested] = useState(null);
+
+  // Sync to the requested chapter while rendering, so effects never see a stale chapter on open.
+  const request = isOpen ? chapterId ?? "" : null;
+  if (request !== requested) {
+    setRequested(request);
+    if (isOpen) setCurrentId(resolveChapterId(chapterId));
+  }
 
   const index = availableChapters.findIndex((chapter) => chapter.id === currentId);
   const chapter = availableChapters[index];
   const previous = availableChapters[index - 1];
   const next = availableChapters[index + 1];
   const nextSoon = next ? null : chapters.find((entry) => entry.number === chapter.number + 1);
-
-  useEffect(() => {
-    if (isOpen) setCurrentId(resolveChapterId(chapterId));
-  }, [isOpen, chapterId]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -67,6 +71,10 @@ export default function ChapterReader({
       }
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen) rememberLastChapter(currentId);
+  }, [currentId, isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;

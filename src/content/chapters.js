@@ -73,3 +73,24 @@ export const availableChapters = chapters.filter((chapter) => chapter.status ===
 export function getChapter(id) {
   return chapters.find((chapter) => chapter.id === id);
 }
+
+export const LAST_CHAPTER_KEY = "kage:last-chapter";
+export const LAST_CHAPTER_EVENT = "kage:last-chapter";
+
+export function readLastChapterId() {
+  try {
+    const id = window.localStorage.getItem(LAST_CHAPTER_KEY);
+    return getChapter(id)?.status === "available" ? id : null;
+  } catch {
+    return null;
+  }
+}
+
+export function rememberLastChapter(id) {
+  try {
+    window.localStorage.setItem(LAST_CHAPTER_KEY, id);
+  } catch {
+    return;
+  }
+  window.dispatchEvent(new CustomEvent(LAST_CHAPTER_EVENT, { detail: id }));
+}
