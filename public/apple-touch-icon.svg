@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <title>Kage</title>
+  <!-- Opaque square with the mark inside the maskable safe zone (inner 80%). -->
+  <rect width="180" height="180" fill="#0b1118"/>
+  <g transform="translate(36 32) scale(1.6875)">
+    <circle cx="32" cy="28" r="22" fill="#d73547"/>
+    <g fill="#05080c">
+      <path d="M21 29.5 32 23l11 6.5z"/>
+      <rect x="29.5" y="29" width="5" height="4"/>
+      <path d="M26 33h12l3 19H23z"/>
+      <path d="M22.5 41.5 44 36.2l.6 2.1-21.4 5.3z"/>
+    </g>
+  </g>
+  <rect y="113" width="180" height="67" fill="#0b1118"/>
+</svg>
