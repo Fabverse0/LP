@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import HeroScene from "./components/HeroScene.jsx";
 import ChapterReader from "./components/ChapterReader.jsx";
 import Characters from "./components/Characters.jsx";
+import QuoteMarquee from "./components/QuoteMarquee.jsx";
 
 const artwork = "/images/kage-ronin-4k.webp";
 
@@ -302,6 +303,8 @@ function App() {
         </section>
 
         <Characters />
+
+        <QuoteMarquee />
 
         <button
           className="closing-band"
