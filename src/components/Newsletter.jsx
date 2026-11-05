@@ -40,6 +40,82 @@ function validate(value) {
   return "";
 }
 
+function copyWithTextarea(text) {
+  const area = document.createElement("textarea");
+  area.value = text;
+  area.setAttribute("readonly", "");
+  area.style.position = "fixed";
+  area.style.opacity = "0";
+  document.body.append(area);
+  area.select();
+  let ok = false;
+  try {
+    ok = document.execCommand("copy");
+  } catch {
+    ok = false;
+  }
+  area.remove();
+  return ok;
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    return copyWithTextarea(text);
+  }
+}
+
+/** "Bagikan": native share sheet when available, otherwise copies the link. */
+function ShareButton() {
+  const [status, setStatus] = useState("");
+  const timer = useRef(0);
+
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+
+  function announce(message) {
+    window.clearTimeout(timer.current);
+    setStatus(message);
+    timer.current = window.setTimeout(() => setStatus(""), 2600);
+  }
+
+  async function handleShare() {
+    const url = `${window.location.origin}${window.location.pathname}`;
+    const data = {
+      title: document.title || "Kage — The Last Light",
+      text: "Kage, kisah fiktif seorang ronin di bawah matahari merah.",
+      url,
+    };
+
+    if (navigator.share && (navigator.canShare?.(data) ?? true)) {
+      try {
+        await navigator.share(data);
+        return;
+      } catch (error) {
+        // The reader closed the share sheet: respect that and stay quiet.
+        if (error?.name === "AbortError") return;
+      }
+    }
+
+    announce((await copyText(url)) ? "Tautan disalin" : `Salin tautan ini: ${url}`);
+  }
+
+  return (
+    <div className="newsletter__share">
+      <button className="newsletter__share-button" type="button" onClick={handleShare}>
+        Bagikan
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" focusable="false">
+          <path d="M12 15V3M7 8l5-5 5 5M5 13v8h14v-8" stroke="currentColor" strokeWidth="2" />
+        </svg>
+      </button>
+      <p className="newsletter__share-status" role="status" aria-live="polite" aria-atomic="true">
+        {status}
+      </p>
+    </div>
+  );
+}
+
 /**
  * Demo sign-up: validates on the client and remembers the address in localStorage only.
  * Nothing is sent over the network.
@@ -151,6 +227,8 @@ export default function Newsletter() {
           <p className="newsletter__note" id="newsletter-note">
             Ini hanya demo. Alamatmu disimpan di perangkat ini saja; tidak ada data yang dikirim.
           </p>
+
+          <ShareButton />
         </div>
       </div>
     </section>
