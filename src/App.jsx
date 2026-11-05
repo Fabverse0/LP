@@ -7,6 +7,8 @@ import Glossary from "./components/Glossary.jsx";
 import JourneyMap from "./components/JourneyMap.jsx";
 import EmberField from "./components/EmberField.jsx";
 import IntroCurtain from "./components/IntroCurtain.jsx";
+import FilmGrain from "./components/FilmGrain.jsx";
+import AmbientSound from "./components/AmbientSound.jsx";
 
 const artwork = "/images/kage-ronin-4k.webp";
 
@@ -375,6 +377,8 @@ function App() {
           </a>
         </div>
       </footer>
+      <FilmGrain />
+      <AmbientSound />
       <ChapterReader
         isOpen={readerOpen}
         onClose={() => setReaderOpen(false)}
