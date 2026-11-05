@@ -138,3 +138,61 @@ export const glossary = [
       "Waktu ketika wajah sulit dikenali dari kejauhan. Di jam itulah semua keputusan dalam cerita ini diambil.",
   },
 ];
+
+// Titik di peta perjalanan. x/y dalam satuan viewBox 1000 x 600.
+export const waypoints = [
+  {
+    id: "ladang",
+    chapter: 1,
+    place: "Ladang",
+    title: "Jalan tanpa tuan",
+    note: "Rumput menutup bekas langkah. Matahari tinggal merah.",
+    x: 90,
+    y: 470,
+    released: true,
+  },
+  {
+    id: "persimpangan",
+    chapter: 2,
+    place: "Persimpangan",
+    title: "Roda di lumpur",
+    note: "Jalur terbelah dua. Sebuah gerobak terhenti.",
+    x: 330,
+    y: 360,
+    released: true,
+  },
+  {
+    id: "sungai",
+    chapter: 3,
+    place: "Jalan sungai",
+    title: "Lentera kecil",
+    note: "Mereka berjalan bersama sampai pohon pertama.",
+    x: 520,
+    y: 470,
+    released: true,
+  },
+  {
+    id: "jembatan",
+    chapter: 4,
+    place: "Jembatan kayu",
+    title: "Bekas roda",
+    note: "Jejak di tanah basah masih terlihat.",
+    x: 730,
+    y: 300,
+    released: false,
+  },
+  {
+    id: "celah",
+    chapter: 5,
+    place: "Celah gunung",
+    title: "Sebelum malam",
+    note: "Tempat perintah terakhir menunjuk.",
+    x: 900,
+    y: 120,
+    released: false,
+  },
+];
+
+// Jalur tangan: kurva yang sedikit goyah melewati setiap titik.
+export const journeyPath =
+  "M90 470 C 150 430, 200 470, 250 420 S 300 350, 330 360 C 370 372, 400 430, 450 450 S 500 480, 520 470 C 570 446, 600 400, 650 360 S 700 310, 730 300 C 780 284, 800 230, 840 190 S 880 140, 900 120";
