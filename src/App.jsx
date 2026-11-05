@@ -439,9 +439,13 @@ function App() {
             data-reveal
           />
           <nav className="footer-nav" aria-label="Navigasi penutup" data-reveal>
-            <a href="#story">Kisah</a>
+            {navLinks.map((link) => (
+              <a href={link.href} key={link.href}>
+                {link.label}
+              </a>
+            ))}
             <a href="#hour">Suasana</a>
-            <a href="#top">Kembali ke atas</a>
+            <a href="#join">Kabari aku</a>
           </nav>
         </div>
         <div className="site-footer__bottom">
