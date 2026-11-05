@@ -10,6 +10,7 @@ import IntroCurtain from "./components/IntroCurtain.jsx";
 import FilmGrain from "./components/FilmGrain.jsx";
 import AmbientSound from "./components/AmbientSound.jsx";
 import Gallery from "./components/Gallery.jsx";
+import ChapterIndex from "./components/ChapterIndex.jsx";
 
 const artwork = "/images/kage-ronin-4k.webp";
 
@@ -144,7 +145,12 @@ function App() {
   const [activeHour, setActiveHour] = usePersistentHour();
   const [readerOpen, setReaderOpen] = useState(false);
   const selectedHour = hours.find((hour) => hour.id === activeHour) ?? hours[0];
+  const [readerChapter, setReaderChapter] = useState(undefined);
   const openReader = useCallback(() => setReaderOpen(true), []);
+  const openChapter = useCallback((chapterId) => {
+    setReaderChapter(chapterId);
+    setReaderOpen(true);
+  }, []);
 
   useSectionReveal();
   usePageShortcuts({
@@ -265,6 +271,8 @@ function App() {
             </p>
           </div>
         </section>
+
+        <ChapterIndex onOpen={openChapter} />
 
         <section className="hour chapter" id="hour" aria-labelledby="hour-title">
           <div className="hour__layout">
@@ -387,6 +395,8 @@ function App() {
         onClose={() => setReaderOpen(false)}
         artwork={artwork}
         atmosphere={selectedHour.label}
+        chapterId={readerChapter}
+        onChapterChange={setReaderChapter}
       />
     </div>
   );
