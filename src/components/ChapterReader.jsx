@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { availableChapters, chapters, getChapter, rememberLastChapter } from "../content/chapters.js";
+import {
+  availableChapters,
+  chapters,
+  getChapter,
+  readingMinutes,
+  rememberLastChapter,
+} from "../content/chapters.js";
 import "./ChapterReader.css";
 
 const ordinals = ["pertama", "kedua", "ketiga", "keempat", "kelima", "keenam", "ketujuh"];
@@ -36,6 +42,8 @@ export default function ChapterReader({
   const dialog = useRef(null);
   const title = useRef(null);
   const navigated = useRef(false);
+  const progress = useRef(null);
+  const frame = useRef(0);
   const [currentId, setCurrentId] = useState(() => resolveChapterId(chapterId));
   const [requested, setRequested] = useState(null);
 
@@ -76,9 +84,25 @@ export default function ChapterReader({
     if (isOpen) rememberLastChapter(currentId);
   }, [currentId, isOpen]);
 
+  function updateProgress() {
+    frame.current = 0;
+    const element = dialog.current;
+    if (!element || !progress.current) return;
+    const distance = element.scrollHeight - element.clientHeight;
+    const ratio = distance > 0 ? Math.min(1, Math.max(0, element.scrollTop / distance)) : 0;
+    progress.current.style.transform = `scaleX(${ratio})`;
+  }
+
+  function scheduleProgress() {
+    if (!frame.current) frame.current = requestAnimationFrame(updateProgress);
+  }
+
+  useEffect(() => () => cancelAnimationFrame(frame.current), []);
+
   useEffect(() => {
     if (!isOpen) return;
     dialog.current.scrollTop = 0;
+    updateProgress();
     if (navigated.current) {
       title.current?.focus({ preventScroll: true });
       navigated.current = false;
@@ -134,6 +158,7 @@ export default function ChapterReader({
       aria-describedby="reader-intro"
       onClose={onClose}
       onKeyDown={handleKeyDown}
+      onScroll={scheduleProgress}
       aria-keyshortcuts="ArrowLeft ArrowRight"
       onCancel={(event) => {
         event.preventDefault();
@@ -141,6 +166,9 @@ export default function ChapterReader({
       }}
     >
       <header className="reader__bar">
+        <span className="reader__progress" aria-hidden="true">
+          <span className="reader__progress-fill" ref={progress} />
+        </span>
         <span className="reader__brand">Kage</span>
         <nav className="reader__nav" aria-label="Navigasi bab">
           <button
@@ -175,7 +203,9 @@ export default function ChapterReader({
 
       <article className="reader__chapter" key={chapter.id}>
         <header className="reader__heading">
-          <p className="reader__label">Bab {ordinal(chapter.number)} · Kisah fiktif</p>
+          <p className="reader__label">
+            Bab {ordinal(chapter.number)} · {readingMinutes(chapter)} menit baca · Kisah fiktif
+          </p>
           <h2 id="reader-title" ref={title} tabIndex={-1}>{chapter.title}</h2>
           <p className="reader__intro" id="reader-intro">{chapter.intro}</p>
         </header>

@@ -30,6 +30,23 @@
   font-family: var(--font-display);
 }
 
+.reader__progress {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.reader__progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--red-bright);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
 .reader__brand {
   font-size: var(--size-body);
   font-weight: 700;

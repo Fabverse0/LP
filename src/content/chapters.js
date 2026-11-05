@@ -74,6 +74,14 @@ export function getChapter(id) {
   return chapters.find((chapter) => chapter.id === id);
 }
 
+const WORDS_PER_MINUTE = 200;
+
+export function readingMinutes(chapter) {
+  const text = [chapter.title, chapter.intro, ...chapter.paragraphs].join(" ");
+  const words = text.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
+}
+
 export const LAST_CHAPTER_KEY = "kage:last-chapter";
 export const LAST_CHAPTER_EVENT = "kage:last-chapter";
 
