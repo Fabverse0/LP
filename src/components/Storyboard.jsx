@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import "./Storyboard.css";
 
 const PANELS = [
@@ -67,6 +67,97 @@ const PANELS = [
 export default function Storyboard() {
   const section = useRef(null);
   const track = useRef(null);
+
+  useEffect(() => {
+    const root = section.current;
+    const rail = track.current;
+    if (!root || !rail) return undefined;
+
+    // Rel horizontal hanya di layar lebar dan bila gerak tidak dikurangi.
+    const query = window.matchMedia("(min-width: 680px) and (prefers-reduced-motion: no-preference)");
+    let distance = 0;
+    let raf = 0;
+    let ticking = false;
+    let listening = false;
+    let visible = false;
+    let pinned = false;
+
+    const measure = () => {
+      distance = Math.max(0, rail.scrollWidth - window.innerWidth);
+      root.style.height = `${Math.round(distance + window.innerHeight)}px`;
+    };
+
+    const update = () => {
+      ticking = false;
+      const top = root.getBoundingClientRect().top;
+      const x = Math.min(distance, Math.max(0, -top));
+      root.style.setProperty("--x", x.toFixed(1));
+      root.style.setProperty("--p", distance > 0 ? (x / distance).toFixed(4) : "0");
+    };
+
+    const request = () => {
+      if (ticking) return;
+      ticking = true;
+      raf = window.requestAnimationFrame(update);
+    };
+
+    const resize = () => {
+      measure();
+      request();
+    };
+
+    const listen = (on) => {
+      if (on === listening) return;
+      listening = on;
+      if (on) {
+        window.addEventListener("scroll", request, { passive: true });
+        request();
+      } else {
+        window.removeEventListener("scroll", request);
+        window.cancelAnimationFrame(raf);
+        ticking = false;
+      }
+    };
+
+    const setPinned = (on) => {
+      if (on === pinned) return;
+      pinned = on;
+      root.classList.toggle("is-pinned", on);
+      if (on) {
+        window.addEventListener("resize", resize);
+        measure();
+        update();
+        listen(visible);
+      } else {
+        window.removeEventListener("resize", resize);
+        listen(false);
+        root.style.removeProperty("height");
+        ["--x", "--p"].forEach((name) => root.style.removeProperty(name));
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (!pinned) return;
+        listen(visible);
+        if (!visible) update();
+      },
+      { rootMargin: "20% 0px" },
+    );
+
+    const applyQuery = () => setPinned(query.matches);
+
+    observer.observe(root);
+    applyQuery();
+    query.addEventListener("change", applyQuery);
+
+    return () => {
+      observer.disconnect();
+      query.removeEventListener("change", applyQuery);
+      setPinned(false);
+    };
+  }, []);
 
   return (
     <section className="storyboard" id="storyboard" ref={section} aria-labelledby="storyboard-title">

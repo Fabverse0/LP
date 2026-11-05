@@ -172,3 +172,100 @@
 .storyboard__meter {
   display: none;
 }
+
+/* ---------- Rel horizontal (layar >= 680px, gerak penuh) ---------- */
+.storyboard.is-pinned .storyboard__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.storyboard.is-pinned .storyboard__track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  transform: translate3d(calc(var(--x) * -1px), 0, 0);
+  will-change: transform;
+}
+
+.storyboard.is-pinned .storyboard__intro {
+  flex: none;
+  width: 58vw;
+  height: 100%;
+  min-height: 0;
+  align-content: center;
+  padding: var(--gutter) calc(var(--gutter) * 2);
+}
+
+.storyboard.is-pinned .storyboard__arrow {
+  transform: none;
+  animation: storyboard-nudge 1.6s cubic-bezier(0.6, 0, 0.3, 1) infinite;
+}
+
+.storyboard.is-pinned .storyboard__list {
+  display: flex;
+  height: 100%;
+}
+
+.storyboard.is-pinned .storyboard__item {
+  flex: none;
+  width: 86vw;
+  height: 100%;
+}
+
+.storyboard.is-pinned .storyboard__panel {
+  grid-template-areas:
+    "num art"
+    "copy art";
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-content: stretch;
+  gap: 0 clamp(1.5rem, 3vw, 4rem);
+  height: 100%;
+  padding: calc(var(--gutter) * 2.4) calc(var(--gutter) * 1.6);
+}
+
+.storyboard.is-pinned .storyboard__num {
+  font-size: min(24vw, 42vh);
+}
+
+.storyboard.is-pinned .storyboard__title {
+  font-size: min(6.4vw, 11vh);
+}
+
+.storyboard.is-pinned .storyboard__art {
+  height: 100%;
+  aspect-ratio: auto;
+}
+
+.storyboard.is-pinned .storyboard__meter {
+  position: absolute;
+  right: var(--gutter);
+  bottom: var(--gutter);
+  left: var(--gutter);
+  display: block;
+  height: 2px;
+  background: color-mix(in srgb, var(--paper) 22%, transparent);
+  mix-blend-mode: difference;
+}
+
+.storyboard.is-pinned .storyboard__meter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+  transform: scaleX(var(--p));
+  transform-origin: 0 50%;
+}
+
+@keyframes storyboard-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(0.18em);
+  }
+}
