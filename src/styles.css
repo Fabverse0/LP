@@ -356,97 +356,6 @@ p {
   color: var(--pink-paper);
 }
 
-.folder-stack {
-  position: absolute;
-  z-index: 10;
-  top: 54%;
-  right: var(--gutter);
-  width: min(32vw, 460px);
-  height: 280px;
-}
-
-.folder {
-  position: absolute;
-  right: 0;
-  left: 0;
-  display: grid;
-  min-height: 64px;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  padding: 16px 24px;
-  color: var(--paper);
-  cursor: pointer;
-  text-align: left;
-  text-decoration: none;
-  transition: transform 220ms ease;
-}
-
-.folder:hover {
-  transform: translateY(-5px);
-}
-
-.folder--story {
-  z-index: 1;
-  top: 0;
-  --folder-color: color-mix(in srgb, var(--blue) 70%, var(--night));
-  background: var(--folder-color);
-}
-
-.folder--hour {
-  z-index: 2;
-  top: 60px;
-  --folder-color: color-mix(in srgb, var(--red) 85%, var(--night));
-  background: var(--folder-color);
-}
-
-.folder--read {
-  z-index: 3;
-  top: 120px;
-  min-height: 150px;
-  --folder-color: var(--night);
-  background: var(--folder-color);
-}
-
-.folder__tab {
-  position: absolute;
-  top: -22px;
-  right: 24px;
-  min-width: 112px;
-  padding: 3px 18px 5px;
-  clip-path: polygon(0 100%, 0 23%, 10% 23%, 18% 0, 83% 0, 91% 23%, 100% 23%, 100% 100%);
-  background: var(--folder-color);
-  color: var(--paper);
-  font-family: var(--font-display);
-  font-size: var(--size-small);
-  text-align: center;
-}
-
-.folder__label {
-  grid-column: 1;
-  font-family: var(--font-display);
-  font-size: var(--size-lead);
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
-}
-
-.folder__action {
-  display: inline-flex;
-  min-width: 142px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 22px;
-  grid-column: 2;
-  padding: 16px 20px;
-  background: var(--red-bright);
-  color: var(--paper);
-  font-family: var(--font-display);
-  font-size: var(--size-body);
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.folder__action svg,
 .closing-band__arrow svg,
 .site-footer__return svg {
   display: block;
@@ -1081,28 +990,6 @@ p {
     z-index: 1;
   }
 
-  .folder-stack {
-    width: min(33vw, 300px);
-  }
-
-  .folder__tab {
-    top: -8px;
-  }
-
-  .folder--read {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .folder__action {
-    min-width: 112px;
-    gap: 12px;
-    padding: 12px 14px;
-  }
-
   .story__layout {
     grid-template-columns: repeat(8, minmax(0, 1fr));
   }
@@ -1194,51 +1081,6 @@ p {
   .hero-hours {
     justify-content: center;
     margin-top: 12px;
-  }
-
-  .folder-stack {
-    top: 72%;
-    right: auto;
-    left: var(--gutter);
-    width: calc(100% - 2 * var(--gutter));
-    height: 230px;
-  }
-
-  .folder {
-    min-height: 48px;
-    padding: 10px 16px;
-  }
-
-  .folder--hour {
-    top: 46px;
-  }
-
-  .folder--read {
-    top: 92px;
-    min-height: 132px;
-  }
-
-  .folder__tab {
-    top: -20px;
-    right: 16px;
-    min-width: 92px;
-    padding-inline: 12px;
-  }
-
-  .folder__label {
-    font-size: var(--size-lead);
-  }
-
-  .folder__action {
-    min-width: 112px;
-    gap: 12px;
-    padding: 10px 14px;
-    font-size: var(--size-body);
-  }
-
-  .folder__action svg {
-    width: 23px;
-    height: 23px;
   }
 
   .story,

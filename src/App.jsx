@@ -272,29 +272,6 @@ function App() {
               ))}
             </div>
           </div>
-
-          <nav className="folder-stack" aria-label="Bab cerita">
-            <a className="folder folder--story" href="#story" data-reveal>
-              <span className="folder__tab">Kisah</span>
-              <span className="folder__label">Jalan tanpa tuan</span>
-            </a>
-            <a className="folder folder--hour" href="#hour" data-reveal>
-              <span className="folder__tab">Suasana</span>
-              <span className="folder__label">Ubah suasana</span>
-            </a>
-            <button
-              className="folder folder--read"
-              type="button"
-              onClick={openReader}
-              aria-haspopup="dialog"
-              aria-controls="chapter-reader"
-              data-reveal
-            >
-              <span className="folder__tab">Kage</span>
-              <span className="folder__label">Masuki kisah</span>
-              <span className="folder__action">Baca <ArrowMark /></span>
-            </button>
-          </nav>
         </section>
 
         <section className="story chapter" id="story" aria-labelledby="story-title">
