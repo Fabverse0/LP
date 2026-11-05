@@ -83,6 +83,7 @@ export default function Storyboard() {
     let pinned = false;
 
     let lastX = null;
+    let lastTime = null;
     let speed = 0;
 
     const items = () => Array.from(rail.querySelectorAll(".storyboard__item"));
@@ -103,9 +104,15 @@ export default function Storyboard() {
       const top = root.getBoundingClientRect().top;
       const x = Math.min(distance, Math.max(0, -top));
 
-      // Kecepatan dihaluskan lalu dijepit ke -1..1 untuk miring/skala panel.
-      speed = speed * 0.82 + (lastX === null ? 0 : x - lastX) * 0.18;
+      // Kecepatan (px per bingkai 60fps) dihaluskan lalu dijepit ke -1..1 untuk miring/skala panel.
+      // Peluruhan memakai waktu nyata agar sama di layar 60Hz maupun 120Hz.
+      const now = performance.now();
+      const frames = lastTime === null ? 1 : Math.min(6, Math.max(0.25, (now - lastTime) / 16.67));
+      const keep = 0.82 ** frames;
+      const delta = lastX === null ? 0 : (x - lastX) / frames;
+      speed = speed * keep + delta * (1 - keep);
       lastX = x;
+      lastTime = now;
       if (Math.abs(speed) < 0.02) speed = 0;
       const velocity = Math.max(-1, Math.min(1, speed / 40));
 
@@ -133,6 +140,10 @@ export default function Storyboard() {
       if (on === listening) return;
       listening = on;
       if (on) {
+        // Masuk kembali tanpa lonjakan kecepatan palsu.
+        lastX = null;
+        lastTime = null;
+        speed = 0;
         window.addEventListener("scroll", request, { passive: true });
         request();
       } else {
@@ -158,6 +169,7 @@ export default function Storyboard() {
         ["--x", "--p", "--v", "--va"].forEach((name) => root.style.removeProperty(name));
         items().forEach((item) => item.style.removeProperty("--o"));
         lastX = null;
+        lastTime = null;
         speed = 0;
       }
     };
