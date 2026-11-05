@@ -37,6 +37,47 @@
   text-transform: uppercase;
 }
 
+.reader__nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  margin-right: 16px;
+}
+
+.reader__step {
+  display: inline-grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.reader__step:hover:not(:disabled) {
+  background: var(--paper);
+  color: var(--night);
+}
+
+.reader__step:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.reader__step svg {
+  width: 22px;
+  height: 22px;
+}
+
+.reader__count {
+  min-width: 4ch;
+  font-size: var(--size-small);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
 .reader__close {
   display: inline-flex;
   min-height: 44px;
@@ -69,6 +110,15 @@
   margin-bottom: 24px;
   font-family: var(--font-display);
   font-size: var(--size-small);
+}
+
+.reader__heading h2:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.reader__heading h2:focus-visible {
+  outline: 3px solid var(--paper);
+  outline-offset: 8px;
 }
 
 .reader__heading h2 {
@@ -125,6 +175,59 @@
   font-size: var(--size-small);
 }
 
+.reader__pager {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px;
+}
+
+.reader__turn {
+  display: flex;
+  min-height: 120px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: none;
+  padding: 20px;
+  background: var(--blue);
+  color: var(--paper);
+  text-align: left;
+}
+
+button.reader__turn {
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+button.reader__turn:hover {
+  background: var(--red-bright);
+}
+
+.reader__turn--next,
+.reader__turn--soon {
+  grid-column: 2;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.reader__turn--soon {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--blue);
+}
+
+.reader__turn-label {
+  font-size: var(--size-small);
+}
+
+.reader__turn-title {
+  font-size: var(--size-lead);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
 .reader__return {
   display: inline-flex;
   min-height: 48px;
@@ -147,6 +250,19 @@
 }
 
 @media (max-width: 680px) {
+  .reader__nav {
+    margin-right: 8px;
+  }
+
+  .reader__pager {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .reader__turn--next,
+  .reader__turn--soon {
+    grid-column: 1;
+  }
+
   .reader__chapter {
     padding-top: 40px;
     padding-bottom: 64px;

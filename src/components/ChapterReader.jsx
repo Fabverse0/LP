@@ -1,9 +1,52 @@
-import React, { useEffect, useRef } from "react";
-import { firstChapter } from "../content/chapter.js";
+import React, { useEffect, useRef, useState } from "react";
+import { availableChapters, chapters, getChapter } from "../content/chapters.js";
 import "./ChapterReader.css";
 
-export default function ChapterReader({ isOpen, onClose, artwork, atmosphere }) {
+const ordinals = ["pertama", "kedua", "ketiga", "keempat", "kelima", "keenam", "ketujuh"];
+
+function ordinal(number) {
+  return ordinals[number - 1] ?? `ke-${number}`;
+}
+
+function resolveChapterId(id) {
+  const chapter = getChapter(id);
+  return chapter?.status === "available" ? chapter.id : availableChapters[0].id;
+}
+
+function ArrowIcon({ direction }) {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+      <path
+        d={direction === "prev" ? "M20 12H4m6-6-6 6 6 6" : "M4 12h16m-6-6 6 6-6 6"}
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+}
+
+export default function ChapterReader({
+  isOpen,
+  onClose,
+  artwork,
+  atmosphere,
+  chapterId,
+  onChapterChange,
+}) {
   const dialog = useRef(null);
+  const title = useRef(null);
+  const navigated = useRef(false);
+  const [currentId, setCurrentId] = useState(() => resolveChapterId(chapterId));
+
+  const index = availableChapters.findIndex((chapter) => chapter.id === currentId);
+  const chapter = availableChapters[index];
+  const previous = availableChapters[index - 1];
+  const next = availableChapters[index + 1];
+  const nextSoon = next ? null : chapters.find((entry) => entry.number === chapter.number + 1);
+
+  useEffect(() => {
+    if (isOpen) setCurrentId(resolveChapterId(chapterId));
+  }, [isOpen, chapterId]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -18,11 +61,28 @@ export default function ChapterReader({ isOpen, onClose, artwork, atmosphere }) 
     return () => {
       if (element.open) element.close();
       document.body.style.overflow = previousOverflow;
+      navigated.current = false;
       if (trigger instanceof HTMLElement && trigger.isConnected) {
         trigger.focus({ preventScroll: true });
       }
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    dialog.current.scrollTop = 0;
+    if (navigated.current) {
+      title.current?.focus({ preventScroll: true });
+      navigated.current = false;
+    }
+  }, [currentId, isOpen]);
+
+  function goTo(target) {
+    if (!target) return;
+    navigated.current = true;
+    setCurrentId(target.id);
+    onChapterChange?.(target.id);
+  }
 
   function keepFocusInside(event) {
     if (event.key !== "Tab") return;
@@ -55,6 +115,29 @@ export default function ChapterReader({ isOpen, onClose, artwork, atmosphere }) 
     >
       <header className="reader__bar">
         <span className="reader__brand">Kage</span>
+        <nav className="reader__nav" aria-label="Navigasi bab">
+          <button
+            className="reader__step"
+            type="button"
+            onClick={() => goTo(previous)}
+            disabled={!previous}
+            aria-label={previous ? `Bab sebelumnya: ${previous.title}` : "Tidak ada bab sebelumnya"}
+          >
+            <ArrowIcon direction="prev" />
+          </button>
+          <span className="reader__count">
+            {index + 1} / {availableChapters.length}
+          </span>
+          <button
+            className="reader__step"
+            type="button"
+            onClick={() => goTo(next)}
+            disabled={!next}
+            aria-label={next ? `Bab berikutnya: ${next.title}` : "Tidak ada bab berikutnya"}
+          >
+            <ArrowIcon direction="next" />
+          </button>
+        </nav>
         <button className="reader__close" type="button" onClick={onClose} autoFocus>
           Tutup
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
@@ -63,11 +146,11 @@ export default function ChapterReader({ isOpen, onClose, artwork, atmosphere }) 
         </button>
       </header>
 
-      <article className="reader__chapter">
+      <article className="reader__chapter" key={chapter.id}>
         <header className="reader__heading">
-          <p className="reader__label">Bab pertama · Kisah fiktif</p>
-          <h2 id="reader-title">{firstChapter.title}</h2>
-          <p className="reader__intro" id="reader-intro">{firstChapter.intro}</p>
+          <p className="reader__label">Bab {ordinal(chapter.number)} · Kisah fiktif</p>
+          <h2 id="reader-title" ref={title} tabIndex={-1}>{chapter.title}</h2>
+          <p className="reader__intro" id="reader-intro">{chapter.intro}</p>
         </header>
 
         <figure className="reader__cover">
@@ -81,9 +164,28 @@ export default function ChapterReader({ isOpen, onClose, artwork, atmosphere }) 
         </figure>
 
         <div className="reader__prose">
-          {firstChapter.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          {chapter.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
           <footer className="reader__ending">
-            <p>Akhir bab pertama.</p>
+            <p>Akhir bab {ordinal(chapter.number)}.</p>
+            <div className="reader__pager">
+              {previous && (
+                <button className="reader__turn reader__turn--prev" type="button" onClick={() => goTo(previous)}>
+                  <span className="reader__turn-label">Sebelumnya</span>
+                  <span className="reader__turn-title">{previous.title}</span>
+                </button>
+              )}
+              {next ? (
+                <button className="reader__turn reader__turn--next" type="button" onClick={() => goTo(next)}>
+                  <span className="reader__turn-label">Bab berikutnya</span>
+                  <span className="reader__turn-title">{next.title}</span>
+                </button>
+              ) : nextSoon && (
+                <p className="reader__turn reader__turn--soon">
+                  <span className="reader__turn-label">Segera</span>
+                  <span className="reader__turn-title">{nextSoon.title}</span>
+                </p>
+              )}
+            </div>
             <button className="reader__return" type="button" onClick={onClose}>
               Kembali ke perjalanan
               <span aria-hidden="true">↗</span>
