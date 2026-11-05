@@ -109,6 +109,20 @@ function usePageShortcuts({ onHour, onRead, disabled }) {
   }, [onHour, onRead, disabled]);
 }
 
+function HourWipe({ hour }) {
+  const [wipe, setWipe] = useState(null);
+  const firstHour = React.useRef(hour);
+
+  useEffect(() => {
+    if (hour === firstHour.current && wipe === null) return;
+    setWipe((count) => (count ?? 0) + 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hour]);
+
+  if (wipe === null) return null;
+  return <span key={wipe} className="hour-wipe" aria-hidden="true" />;
+}
+
 function ArrowMark() {
   return (
     <svg aria-hidden="true" viewBox="0 0 40 40" fill="none">
@@ -132,6 +146,7 @@ function App() {
 
   return (
     <div className="site-shell" data-hour={activeHour}>
+      <HourWipe hour={activeHour} />
       <a className="skip-link" href="#main">
         Langsung ke konten
       </a>
