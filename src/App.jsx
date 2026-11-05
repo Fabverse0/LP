@@ -336,9 +336,9 @@ function App() {
 
         <JourneyMap />
 
-        <Gallery />
-
         <Newsletter />
+
+        <Gallery />
 
         <button
           className="closing-band"
