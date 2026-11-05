@@ -966,25 +966,28 @@ p {
 .has-js .story__art[data-reveal] {
   opacity: 1;
   transform: none;
-  clip-path: circle(0% at 50% 62%);
-  transition: clip-path 1600ms cubic-bezier(0.65, 0, 0.15, 1) 120ms;
 }
 
-.has-js .story__art[data-reveal].is-visible {
-  clip-path: circle(47% at 50% 50%);
-}
-
+/* The growing circle lives on the image, not the observed container:
+   Chrome clips IntersectionObserver targets by their own clip-path. */
 .has-js .story__art[data-reveal] .story__art-image {
+  clip-path: circle(0% at 50% 60%);
   transform: scale(1.35) translateY(6%);
-  transition: filter 420ms ease, transform 2200ms cubic-bezier(0.16, 1, 0.3, 1) 120ms;
+  transition: filter 420ms ease,
+    clip-path 1600ms cubic-bezier(0.65, 0, 0.15, 1) 120ms,
+    transform 2200ms cubic-bezier(0.16, 1, 0.3, 1) 120ms;
 }
 
 .has-js .story__art[data-reveal].is-visible .story__art-image {
+  clip-path: circle(75% at 50% 50%);
   transform: none;
 }
 
 .has-js h2[data-reveal] {
-  clip-path: inset(0 0 100% 0);
+  /* Chrome clips IntersectionObserver targets by their own clip-path, so a
+     fully clipped heading would never report as visible. Leave a sliver;
+     opacity keeps it hidden until the reveal fires. */
+  clip-path: inset(0 0 80% 0);
   transform: translateY(0.45em) skewY(5deg);
   transform-origin: 0 100%;
   transition: opacity 900ms ease var(--reveal-delay, 0ms),
@@ -1434,11 +1437,8 @@ p {
     clip-path: none;
   }
 
-  .has-js .story__art[data-reveal] {
-    clip-path: circle(47% at 50% 50%);
-  }
-
   .has-js .story__art[data-reveal] .story__art-image {
+    clip-path: none;
     transform: none;
   }
 
