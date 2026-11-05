@@ -1,0 +1,174 @@
+/* Papan cerita. Bawaan: tumpukan vertikal biasa.
+   .is-pinned (ditambah JS di layar lebar) mengubahnya menjadi rel horizontal. */
+.storyboard {
+  --x: 0;
+  --p: 0;
+  --v: 0;
+  --va: 0;
+
+  position: relative;
+  background: var(--night);
+  color: var(--paper);
+}
+
+.storyboard__stage {
+  position: relative;
+}
+
+.storyboard__intro {
+  display: grid;
+  align-content: end;
+  gap: 1.2rem;
+  min-height: 70vh;
+  min-height: 70svh;
+  padding: calc(var(--gutter) * 3) var(--gutter) calc(var(--gutter) * 2);
+}
+
+.storyboard__eyebrow,
+.storyboard__kicker {
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.storyboard__heading {
+  max-width: 10ch;
+  font-size: var(--size-head);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+}
+
+.storyboard__hint {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  margin-top: 1rem;
+  color: var(--red-bright);
+  font-family: var(--font-display);
+  font-size: var(--size-display);
+  font-weight: 700;
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+}
+
+.storyboard__arrow {
+  width: 0.9em;
+  height: 0.34em;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
+  stroke-linecap: square;
+  /* Tumpukan vertikal: panah menunjuk ke bawah. */
+  transform: rotate(90deg);
+}
+
+.storyboard__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.storyboard__panel {
+  --ink: var(--paper);
+  --tint: var(--blue);
+
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "art"
+    "num"
+    "copy";
+  align-content: start;
+  gap: 1rem;
+  overflow: hidden;
+  padding: var(--gutter) var(--gutter) calc(var(--gutter) * 2.5);
+  background: var(--tint);
+  color: var(--ink);
+}
+
+.storyboard__panel--blue {
+  --tint: var(--blue);
+}
+
+.storyboard__panel--red {
+  --tint: var(--red);
+}
+
+.storyboard__panel--night {
+  --tint: var(--night);
+}
+
+.storyboard__panel--paper {
+  --tint: var(--pink-paper);
+  --ink: var(--night);
+}
+
+.storyboard__panel--ember {
+  --tint: var(--red-bright);
+  --ink: var(--night);
+}
+
+.storyboard__num {
+  grid-area: num;
+  font-family: var(--font-display);
+  font-size: clamp(6rem, 34vw, 26rem);
+  font-weight: 700;
+  line-height: 0.78;
+  letter-spacing: -0.06em;
+}
+
+.storyboard__copy {
+  grid-area: copy;
+  display: grid;
+  gap: 0.9rem;
+  max-width: 34rem;
+}
+
+.storyboard__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6.4vw, 6.25rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.storyboard__line {
+  font-size: var(--size-lead);
+  line-height: 1.4;
+}
+
+.storyboard__art {
+  grid-area: art;
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: color-mix(in srgb, var(--night) 30%, var(--tint));
+}
+
+.storyboard__img {
+  position: absolute;
+  top: 0;
+  left: -17%;
+  display: block;
+  width: 134%;
+  height: 100%;
+  object-fit: cover;
+  filter: var(--scene-filter);
+}
+
+.storyboard__panel--paper .storyboard__art {
+  background: transparent;
+}
+
+.storyboard__meter {
+  display: none;
+}
