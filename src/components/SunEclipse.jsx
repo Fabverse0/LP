@@ -45,15 +45,57 @@ export default function SunEclipse() {
       request();
     };
 
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let listening = false;
+    let visible = false;
+
+    const listen = (on) => {
+      if (on === listening) return;
+      listening = on;
+      if (on) {
+        window.addEventListener("scroll", request, { passive: true });
+        window.addEventListener("resize", resize);
+        resize();
+      } else {
+        window.removeEventListener("scroll", request);
+        window.removeEventListener("resize", resize);
+        window.cancelAnimationFrame(raf);
+        ticking = false;
+      }
+    };
+
+    // Gerak dikurangi: tidak ada pin, cukup satu komposisi diam.
+    const applyMotion = () => {
+      const still = motion.matches;
+      root.classList.toggle("is-still", still);
+      if (still) {
+        listen(false);
+        root.style.removeProperty("--p");
+      } else {
+        listen(visible);
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (!motion.matches) listen(visible);
+        // Saat keluar layar, kunci ke ujung terdekat agar tidak tertinggal di tengah fase.
+        if (!visible && !motion.matches) update();
+      },
+      { rootMargin: "25% 0px" },
+    );
+
     measure();
-    update();
-    window.addEventListener("scroll", request, { passive: true });
-    window.addEventListener("resize", resize);
+    applyMotion();
+    observer.observe(root);
+    motion.addEventListener("change", applyMotion);
 
     return () => {
-      window.cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", request);
-      window.removeEventListener("resize", resize);
+      observer.disconnect();
+      motion.removeEventListener("change", applyMotion);
+      listen(false);
+      root.classList.remove("is-still");
     };
   }, []);
 

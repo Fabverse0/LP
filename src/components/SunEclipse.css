@@ -220,6 +220,39 @@
   transform-origin: 0 50%;
 }
 
+/* Gerak dikurangi: tanpa pin, satu komposisi diam dari puncak adegan. */
+@media (prefers-reduced-motion: reduce) {
+  .sun-eclipse {
+    --p: 0.76 !important;
+    height: auto;
+  }
+
+  .sun-eclipse__stage {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  .sun-eclipse__night {
+    clip-path: inset(74% 0 0 0);
+  }
+
+  .sun-eclipse__ground--ember,
+  .sun-eclipse__meter {
+    display: none;
+  }
+
+  .sun-eclipse__step {
+    top: auto;
+    bottom: calc(var(--gutter) * 1.6);
+    max-width: none;
+    font-size: clamp(1.75rem, 4.4vw, 4.5rem);
+    clip-path: none;
+    transform: none;
+  }
+}
+
 .sun-eclipse__eyebrow {
   position: absolute;
   top: calc(var(--gutter) * 2.4);
