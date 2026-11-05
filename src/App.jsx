@@ -11,6 +11,7 @@ import FilmGrain from "./components/FilmGrain.jsx";
 import AmbientSound from "./components/AmbientSound.jsx";
 import Gallery from "./components/Gallery.jsx";
 import ChapterIndex from "./components/ChapterIndex.jsx";
+import { readLastChapterId } from "./content/chapters.js";
 
 const artwork = "/images/kage-ronin-4k.webp";
 
@@ -146,7 +147,10 @@ function App() {
   const [readerOpen, setReaderOpen] = useState(false);
   const selectedHour = hours.find((hour) => hour.id === activeHour) ?? hours[0];
   const [readerChapter, setReaderChapter] = useState(undefined);
-  const openReader = useCallback(() => setReaderOpen(true), []);
+  const openReader = useCallback(() => {
+    setReaderChapter(readLastChapterId() ?? undefined);
+    setReaderOpen(true);
+  }, []);
   const openChapter = useCallback((chapterId) => {
     setReaderChapter(chapterId);
     setReaderOpen(true);
@@ -215,7 +219,7 @@ function App() {
             <button
               className="folder folder--read"
               type="button"
-              onClick={() => setReaderOpen(true)}
+              onClick={openReader}
               aria-haspopup="dialog"
               aria-controls="chapter-reader"
               data-reveal
@@ -259,7 +263,7 @@ function App() {
               <button
                 className="story__read"
                 type="button"
-                onClick={() => setReaderOpen(true)}
+                onClick={() => openChapter("jalan-tanpa-tuan")}
                 aria-haspopup="dialog"
                 aria-controls="chapter-reader"
               >
@@ -332,7 +336,7 @@ function App() {
         <button
           className="closing-band"
           type="button"
-          onClick={() => setReaderOpen(true)}
+          onClick={openReader}
           aria-label="Baca bab pertama: Jalan tanpa tuan"
           aria-haspopup="dialog"
           aria-controls="chapter-reader"
