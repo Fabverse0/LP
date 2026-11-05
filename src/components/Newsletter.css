@@ -216,6 +216,12 @@
     grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
     align-items: end;
   }
+
+  /* Sized to the 1.3fr column, not the viewport, so the word never
+     spills over the form beside it. */
+  .newsletter__title {
+    font-size: clamp(4.5rem, 10.5vw, 13rem);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
