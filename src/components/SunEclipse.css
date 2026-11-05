@@ -146,6 +146,80 @@
   --l: clamp(0, calc((var(--p) - 0.66) / 0.08), 1);
 }
 
+/* Pembalikan: malam menelan merah dari pusat matahari. */
+.sun-eclipse__night {
+  --inv: clamp(0, calc((var(--p) - 0.79) / 0.11), 1);
+  --say: clamp(0, calc((var(--p) - 0.87) / 0.08), 1);
+
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: var(--night);
+  clip-path: circle(calc(var(--inv) * var(--inv) * 92%) at 50% 60%);
+}
+
+.sun-eclipse__ground--ember .sun-eclipse__grass,
+.sun-eclipse__ground--ember .sun-eclipse__ronin {
+  background: var(--red-bright);
+}
+
+.sun-eclipse__ground--ember .sun-eclipse__ronin {
+  opacity: 1;
+}
+
+.sun-eclipse__step {
+  position: absolute;
+  top: calc(var(--gutter) * 2.4);
+  left: var(--gutter);
+  z-index: 2;
+  max-width: 13ch;
+  color: var(--pink-paper);
+  font-family: var(--font-display);
+  font-size: var(--size-head);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  clip-path: inset(-0.1em -0.1em calc((1 - var(--say)) * 100%) -0.1em);
+  transform: translate3d(0, calc((1 - var(--say)) * 0.4em), 0);
+}
+
+/* Meter tipis di kaki layar. */
+.sun-eclipse__meter {
+  position: absolute;
+  right: var(--gutter);
+  bottom: var(--gutter);
+  left: var(--gutter);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  color: var(--paper);
+  mix-blend-mode: difference;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.sun-eclipse__meter-track {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  overflow: hidden;
+  background: color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.sun-eclipse__meter-track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  transform: scaleX(var(--p));
+  transform-origin: 0 50%;
+}
+
 .sun-eclipse__eyebrow {
   position: absolute;
   top: calc(var(--gutter) * 2.4);

@@ -81,6 +81,19 @@ export default function SunEclipse() {
             </React.Fragment>
           ))}
         </h2>
+
+        <div className="sun-eclipse__night">
+          <div className="sun-eclipse__ground sun-eclipse__ground--ember" aria-hidden="true">
+            <div className="sun-eclipse__grass" />
+            <div className="sun-eclipse__ronin" />
+          </div>
+          <p className="sun-eclipse__step">Tapi ia masih punya satu langkah.</p>
+        </div>
+
+        <div className="sun-eclipse__meter" aria-hidden="true">
+          <span className="sun-eclipse__meter-label">Gerhana</span>
+          <span className="sun-eclipse__meter-track" />
+        </div>
       </div>
     </section>
   );
