@@ -11,6 +11,7 @@ import FilmGrain from "./components/FilmGrain.jsx";
 import AmbientSound from "./components/AmbientSound.jsx";
 import Gallery from "./components/Gallery.jsx";
 import ChapterIndex from "./components/ChapterIndex.jsx";
+import SunEclipse from "./components/SunEclipse.jsx";
 import SiteHeader from "./components/SiteHeader.jsx";
 import ScrollProgress from "./components/ScrollProgress.jsx";
 import BackToTop from "./components/BackToTop.jsx";
@@ -339,6 +340,8 @@ function App() {
             </p>
           </div>
         </section>
+
+        <SunEclipse />
 
         <ChapterIndex onOpen={openChapter} />
 
