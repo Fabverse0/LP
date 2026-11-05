@@ -193,6 +193,19 @@ export const waypoints = [
   },
 ];
 
+// Larik pendek untuk pita berjalan. Tiga larik pertama membentuk haiku 5-7-5.
+export const haiku = {
+  title: "Haiku senja",
+  lines: ["Senja yang merah", "gerobak lepas lumpur", "lentera kecil"],
+};
+
+export const marqueeLines = [
+  ...haiku.lines,
+  "Tanpa tuan",
+  "Sebuah jeruk",
+  "Jalan memilih sendiri",
+];
+
 // Jalur tangan: kurva yang sedikit goyah melewati setiap titik.
 export const journeyPath =
   "M90 470 C 150 430, 200 470, 250 420 S 300 350, 330 360 C 370 372, 400 430, 450 450 S 500 480, 520 470 C 570 446, 600 400, 650 360 S 700 310, 730 300 C 780 284, 800 230, 840 190 S 880 140, 900 120";
