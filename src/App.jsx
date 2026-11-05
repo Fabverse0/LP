@@ -12,6 +12,8 @@ import AmbientSound from "./components/AmbientSound.jsx";
 import Gallery from "./components/Gallery.jsx";
 import ChapterIndex from "./components/ChapterIndex.jsx";
 import SiteHeader from "./components/SiteHeader.jsx";
+import ScrollProgress from "./components/ScrollProgress.jsx";
+import BackToTop from "./components/BackToTop.jsx";
 import { readLastChapterId } from "./content/chapters.js";
 
 const artwork = "/images/kage-ronin-4k.webp";
@@ -175,6 +177,7 @@ function App() {
   return (
     <div className="site-shell" data-hour={activeHour}>
       <IntroCurtain />
+      <ScrollProgress />
       <HourWipe hour={activeHour} />
       <a className="skip-link" href="#main">
         Langsung ke konten
@@ -393,6 +396,7 @@ function App() {
           </a>
         </div>
       </footer>
+      <BackToTop />
       <FilmGrain />
       <AmbientSound />
       <ChapterReader
