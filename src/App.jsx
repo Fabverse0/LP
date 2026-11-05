@@ -5,6 +5,7 @@ import Characters from "./components/Characters.jsx";
 import QuoteMarquee from "./components/QuoteMarquee.jsx";
 import Glossary from "./components/Glossary.jsx";
 import JourneyMap from "./components/JourneyMap.jsx";
+import EmberField from "./components/EmberField.jsx";
 
 const artwork = "/images/kage-ronin-4k.webp";
 
@@ -168,6 +169,7 @@ function App() {
       <main id="main">
         <section className="hero" id="top" aria-labelledby="hero-title">
           <HeroScene />
+          <EmberField hour={activeHour} />
           <div className="hero__copy">
             <h1 className="hero__title" id="hero-title" data-reveal>
               <span>Sisa</span>
