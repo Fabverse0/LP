@@ -81,7 +81,8 @@
 .sun-eclipse__grass,
 .sun-eclipse__ronin {
   position: absolute;
-  inset: 0;
+  /* The source layers carry a ~5.5% letterbox; push it below the stage. */
+  inset: 0 0 -7% 0;
   background: var(--night);
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
