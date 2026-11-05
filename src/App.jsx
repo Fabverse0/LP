@@ -4,6 +4,7 @@ import ChapterReader from "./components/ChapterReader.jsx";
 import Characters from "./components/Characters.jsx";
 import QuoteMarquee from "./components/QuoteMarquee.jsx";
 import Glossary from "./components/Glossary.jsx";
+import JourneyMap from "./components/JourneyMap.jsx";
 
 const artwork = "/images/kage-ronin-4k.webp";
 
@@ -308,6 +309,8 @@ function App() {
         <QuoteMarquee />
 
         <Glossary />
+
+        <JourneyMap />
 
         <button
           className="closing-band"
