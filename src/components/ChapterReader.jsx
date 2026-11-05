@@ -267,7 +267,14 @@ export default function ChapterReader({
         </figure>
 
         <div className="reader__prose">
-          {chapter.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          <div className="reader__ornament" aria-hidden="true">
+            <span>{chapter.kanji}</span>
+          </div>
+          {chapter.paragraphs.map((paragraph, position) => (
+            <p key={paragraph} className={position === 0 ? "reader__opening" : undefined}>
+              {paragraph}
+            </p>
+          ))}
           <footer className="reader__ending">
             <p>Akhir bab {ordinal(chapter.number)}.</p>
             <div className="reader__pager">
