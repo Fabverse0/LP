@@ -1,0 +1,245 @@
+.characters {
+  display: grid;
+  min-height: 90svh;
+  align-items: center;
+  padding: clamp(100px, 13vh, 160px) var(--gutter);
+  background: var(--blue);
+  color: var(--paper);
+  transition: background-color 420ms ease;
+}
+
+.characters__layout {
+  display: grid;
+  width: min(100%, 1440px);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: start;
+  column-gap: clamp(16px, 2.5vw, 40px);
+  row-gap: clamp(40px, 6vh, 72px);
+  margin-inline: auto;
+}
+
+.characters__heading {
+  grid-column: 1 / 9;
+}
+
+.characters__eyebrow,
+.characters__role {
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.characters__heading h2 {
+  max-width: 11ch;
+  margin-top: 18px;
+  font-size: var(--size-head);
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+/* Daftar tokoh */
+
+.characters__list {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / 5;
+  border-top: 2px solid var(--paper);
+}
+
+.characters__tab {
+  display: grid;
+  min-height: 64px;
+  grid-template-columns: 3ch minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 2px solid var(--paper);
+  background: transparent;
+  color: var(--pink-paper);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-align: left;
+  transition: color 180ms ease, background-color 180ms ease, padding 220ms ease;
+}
+
+.characters__tab-index {
+  font-size: var(--size-small);
+}
+
+.characters__tab-name {
+  font-size: var(--size-lead);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.characters__tab-kanji {
+  font-size: var(--size-lead);
+  font-weight: 400;
+}
+
+.characters__tab:hover,
+.characters__tab.is-active {
+  color: var(--paper);
+}
+
+.characters__tab.is-active {
+  padding-inline: 14px;
+  background: var(--night);
+}
+
+.characters__tab:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 3px solid var(--paper);
+  outline-offset: 3px;
+}
+
+/* Panggung: panel ditumpuk lalu saling memudar */
+
+.characters__stage {
+  display: grid;
+  grid-column: 5 / 13;
+}
+
+.characters__panel {
+  display: grid;
+  grid-area: 1 / 1;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  column-gap: clamp(16px, 2.5vw, 40px);
+  align-items: end;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 520ms ease, visibility 0s linear 520ms;
+}
+
+.characters__panel.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 520ms ease, visibility 0s;
+}
+
+.characters__panel:focus-visible {
+  outline: 3px solid var(--paper);
+  outline-offset: 8px;
+}
+
+.characters__portrait {
+  position: relative;
+  grid-column: 1 / 6;
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  overflow: hidden;
+  background: var(--night);
+}
+
+.characters__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: var(--scene-filter);
+  transform: scale(1.08);
+  transition: filter 420ms ease, transform 1.4s cubic-bezier(0.2, 0.72, 0.24, 1);
+}
+
+.characters__panel.is-active .characters__image {
+  transform: scale(1);
+}
+
+.characters__kanji {
+  position: absolute;
+  bottom: 0.05em;
+  left: 0.08em;
+  color: var(--paper);
+  font-size: var(--size-display);
+  line-height: 1;
+  mix-blend-mode: normal;
+}
+
+.characters__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  grid-column: 6 / 9;
+  padding-bottom: 6px;
+}
+
+.characters__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.4vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+  text-wrap: balance;
+}
+
+.characters__bio {
+  font-size: var(--size-body);
+  line-height: 1.6;
+}
+
+.characters__quote {
+  margin: 8px 0 0;
+  padding-top: 16px;
+  border-top: 2px solid var(--paper);
+}
+
+.characters__quote p {
+  font-size: var(--size-lead);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+@media (max-width: 1080px) {
+  .characters__portrait {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 10;
+  }
+
+  .characters__copy {
+    grid-column: 1 / -1;
+    padding-top: 24px;
+  }
+}
+
+@media (max-width: 880px) {
+  .characters__layout {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  .characters__heading,
+  .characters__list,
+  .characters__stage {
+    grid-column: 1 / -1;
+  }
+
+  .characters__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 18px;
+  }
+}
+
+@media (max-width: 520px) {
+  .characters__list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .characters__panel,
+  .characters__panel.is-active,
+  .characters__image {
+    transition: none;
+  }
+
+  .characters__image,
+  .characters__panel.is-active .characters__image {
+    transform: none;
+  }
+}
