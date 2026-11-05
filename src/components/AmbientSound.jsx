@@ -96,6 +96,50 @@ function buildWind(context, destination) {
   return [body, air, ...modulators];
 }
 
+// A distant furin: pentatonic pitches, a sine fundamental plus an
+// inharmonic partial, a soft strike and a long exponential decay.
+const CHIME_NOTES = [880, 1046.5, 1174.66, 1318.51, 1567.98];
+const CHIME_GAP = [9000, 22000];
+
+function ringChime(context, destination) {
+  const now = context.currentTime;
+  const pitch = CHIME_NOTES[Math.floor(Math.random() * CHIME_NOTES.length)];
+  const decay = 2.8 + Math.random() * 1.8;
+  const level = 0.035 + Math.random() * 0.03;
+
+  const voice = context.createGain();
+  voice.gain.setValueAtTime(0.0001, now);
+  voice.gain.exponentialRampToValueAtTime(level, now + 0.012);
+  voice.gain.exponentialRampToValueAtTime(0.0001, now + decay);
+
+  let output = voice;
+  if (context.createStereoPanner) {
+    const pan = context.createStereoPanner();
+    pan.pan.value = Math.random() * 1.2 - 0.6;
+    voice.connect(pan);
+    output = pan;
+  }
+  output.connect(destination);
+
+  [[1, 1], [2.76, 0.28], [5.4, 0.08]].forEach(([ratio, weight]) => {
+    const oscillator = context.createOscillator();
+    const partial = context.createGain();
+    oscillator.type = "sine";
+    oscillator.frequency.value = pitch * ratio;
+    partial.gain.value = weight;
+    oscillator.connect(partial).connect(voice);
+    oscillator.start(now);
+    oscillator.stop(now + decay + 0.1);
+  });
+
+  // Occasionally a second, softer strike as the clapper swings back.
+  if (Math.random() < 0.35) {
+    window.setTimeout(() => {
+      if (context.state === "running") ringChime(context, destination);
+    }, 260 + Math.random() * 380);
+  }
+}
+
 function Equalizer() {
   return (
     <span className="ambient-sound__eq" aria-hidden="true">
@@ -133,7 +177,13 @@ export default function AmbientSound() {
       const master = context.createGain();
       master.gain.value = 0;
       master.connect(context.destination);
-      audio.current = { context, master, nodes: buildWind(context, master), suspendTimer: 0 };
+      audio.current = {
+        context,
+        master,
+        nodes: buildWind(context, master),
+        suspendTimer: 0,
+        chimeTimer: 0,
+      };
     }
     const current = audio.current;
     window.clearTimeout(current.suspendTimer);
@@ -141,12 +191,25 @@ export default function AmbientSound() {
     // The user may have switched it off again while resume() was pending.
     if (!playingRef.current || document.hidden) return;
     fadeTo(VOLUME, FADE_IN);
+    scheduleChime();
+  }
+
+  function scheduleChime() {
+    const current = audio.current;
+    window.clearTimeout(current.chimeTimer);
+    const [min, max] = CHIME_GAP;
+    current.chimeTimer = window.setTimeout(() => {
+      if (!playingRef.current || document.hidden || current.context.state !== "running") return;
+      ringChime(current.context, current.master);
+      scheduleChime();
+    }, min + Math.random() * (max - min));
   }
 
   function stop() {
     const current = audio.current;
     if (!current) return;
     fadeTo(0, FADE_OUT);
+    window.clearTimeout(current.chimeTimer);
     window.clearTimeout(current.suspendTimer);
     // Suspend after the fade so the audio thread stops working entirely.
     current.suspendTimer = window.setTimeout(() => {
@@ -181,6 +244,7 @@ export default function AmbientSound() {
     const current = audio.current;
     if (!current) return;
     window.clearTimeout(current.suspendTimer);
+    window.clearTimeout(current.chimeTimer);
     current.context.close().catch(() => {});
     audio.current = null;
   }, []);
