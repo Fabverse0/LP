@@ -57,6 +57,31 @@ function useSectionReveal() {
   }, []);
 }
 
+const HOUR_KEY = "kage:hour";
+
+function readStoredHour() {
+  try {
+    const stored = window.localStorage.getItem(HOUR_KEY);
+    return hours.some((hour) => hour.id === stored) ? stored : "dusk";
+  } catch {
+    return "dusk";
+  }
+}
+
+function usePersistentHour() {
+  const [activeHour, setActiveHour] = useState(readStoredHour);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(HOUR_KEY, activeHour);
+    } catch {
+      // Storage can be blocked; the choice simply lasts for this visit.
+    }
+  }, [activeHour]);
+
+  return [activeHour, setActiveHour];
+}
+
 function ArrowMark() {
   return (
     <svg aria-hidden="true" viewBox="0 0 40 40" fill="none">
@@ -66,7 +91,7 @@ function ArrowMark() {
 }
 
 function App() {
-  const [activeHour, setActiveHour] = useState("dusk");
+  const [activeHour, setActiveHour] = usePersistentHour();
   const [readerOpen, setReaderOpen] = useState(false);
   const selectedHour = hours.find((hour) => hour.id === activeHour) ?? hours[0];
 
