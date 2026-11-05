@@ -1,0 +1,170 @@
+/* Gerhana: satu --p (0..1) dari JS, semua fase dihitung di sini. */
+.sun-eclipse {
+  --p: 0;
+  --sun-cover: 12;
+  /* Fase lokal, masing-masing 0..1. */
+  --rise: clamp(0, calc((var(--p) - 0.02) / 0.16), 1);
+  --grow: clamp(0, calc((var(--p) - 0.18) / 0.32), 1);
+  --shade: clamp(0, calc((var(--p) - 0.2) / 0.18), 1);
+  --push: clamp(0, calc((var(--p) - 0.2) / 0.8), 1);
+
+  position: relative;
+  height: 320vh;
+  background: var(--night);
+  color: var(--paper);
+}
+
+.sun-eclipse__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--night);
+}
+
+/* Langit: cahaya biru tipis di cakrawala saat matahari naik. */
+.sun-eclipse__sky {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.sun-eclipse__sky::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--night) 30%, var(--blue) 62%, var(--night) 78%);
+  opacity: calc(var(--rise) * (1 - var(--grow)));
+}
+
+.sun-eclipse__sun {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  width: clamp(96px, 18vmin, 260px);
+  aspect-ratio: 1;
+  margin: calc(clamp(96px, 18vmin, 260px) / -2) 0 0 calc(clamp(96px, 18vmin, 260px) / -2);
+  border-radius: 50%;
+  background: var(--red-bright);
+  transform: translate3d(0, calc((1 - var(--rise)) * 62vh), 0)
+    scale(calc(0.72 + var(--rise) * 0.28 + (var(--sun-cover) - 1) * var(--grow) * var(--grow)));
+  transform-origin: 50% 50%;
+}
+
+/* Cincin panas yang melebar lebih cepat dari matahari, lalu padam. */
+.sun-eclipse__sun::before,
+.sun-eclipse__sun::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--red-bright);
+  border-radius: 50%;
+  opacity: calc(var(--rise) * (1 - var(--grow)) * 0.55);
+  transform: scale(calc(1.35 + var(--rise) * 0.25));
+}
+
+.sun-eclipse__sun::after {
+  opacity: calc(var(--rise) * (1 - var(--grow)) * 0.28);
+  transform: scale(calc(1.8 + var(--rise) * 0.6));
+}
+
+/* Rumput dan ronin: lapisan transparan dipakai sebagai topeng berwarna. */
+.sun-eclipse__ground {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.sun-eclipse__grass,
+.sun-eclipse__ronin {
+  position: absolute;
+  inset: 0;
+  background: var(--night);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-position: 50% 100%;
+  mask-position: 50% 100%;
+}
+
+.sun-eclipse__grass {
+  -webkit-mask-image: url("/images/kage-grass-layer.webp");
+  mask-image: url("/images/kage-grass-layer.webp");
+  transform: scale(calc(1 + var(--push) * 0.12));
+  transform-origin: 50% 100%;
+}
+
+.sun-eclipse__ronin {
+  -webkit-mask-image: url("/images/kage-ronin-layer.webp");
+  mask-image: url("/images/kage-ronin-layer.webp");
+  opacity: var(--shade);
+  transform: translate3d(0, calc((1 - var(--shade)) * 4vh), 0) scale(calc(1 + var(--push) * 0.32));
+  transform-origin: 50% 82%;
+}
+
+/* Tiga larik raksasa, disapu satu per satu. */
+.sun-eclipse__lines {
+  position: absolute;
+  top: calc(var(--gutter) * 2.4);
+  right: var(--gutter);
+  left: var(--gutter);
+  z-index: 2;
+  margin: 0;
+  color: var(--night);
+  font-family: var(--font-display);
+  font-size: clamp(3.25rem, 15vw, 19rem);
+  font-weight: 700;
+  line-height: 0.84;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.sun-eclipse__line {
+  --l: 0;
+  display: block;
+  width: fit-content;
+  padding-bottom: 0.04em;
+  clip-path: inset(-0.1em calc((1 - var(--l)) * 100%) -0.1em 0);
+  transform: translate3d(calc((1 - var(--l)) * -0.12em), 0, 0);
+}
+
+.sun-eclipse__line:nth-of-type(1) {
+  --l: clamp(0, calc((var(--p) - 0.46) / 0.08), 1);
+}
+
+.sun-eclipse__line:nth-of-type(2) {
+  --l: clamp(0, calc((var(--p) - 0.56) / 0.08), 1);
+  margin-left: auto;
+}
+
+.sun-eclipse__line:nth-of-type(3) {
+  --l: clamp(0, calc((var(--p) - 0.66) / 0.08), 1);
+}
+
+.sun-eclipse__eyebrow {
+  position: absolute;
+  top: calc(var(--gutter) * 2.4);
+  left: var(--gutter);
+  z-index: 3;
+  display: grid;
+  gap: 0.4rem;
+  max-width: 28ch;
+  font-size: var(--size-small);
+  opacity: calc(1 - var(--grow) * 4);
+}
+
+.sun-eclipse__eyebrow span:first-child {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.sun-eclipse__eyebrow span:last-child {
+  font-size: var(--size-lead);
+}
