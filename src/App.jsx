@@ -15,9 +15,19 @@ import SiteHeader from "./components/SiteHeader.jsx";
 import ScrollProgress from "./components/ScrollProgress.jsx";
 import BackToTop from "./components/BackToTop.jsx";
 import Newsletter from "./components/Newsletter.jsx";
+import KeyboardHelp from "./components/KeyboardHelp.jsx";
 import { readLastChapterId } from "./content/chapters.js";
 
 const artwork = "/images/kage-ronin-4k.webp";
+
+const shortcuts = [
+  { keys: ["R"], label: "Baca bab terakhir" },
+  { keys: ["1"], label: "Suasana senja" },
+  { keys: ["2"], label: "Suasana sisa bara" },
+  { keys: ["3"], label: "Suasana malam" },
+  { keys: ["←", "→"], label: "Bab sebelumnya / berikutnya di pembaca" },
+  { keys: ["?"], label: "Tampilkan pintasan ini" },
+];
 
 const navLinks = [
   { href: "#story", label: "Kisah" },
@@ -400,6 +410,7 @@ function App() {
         </div>
       </footer>
       <BackToTop />
+      <KeyboardHelp shortcuts={shortcuts} />
       <FilmGrain />
       <AmbientSound />
       <ChapterReader
