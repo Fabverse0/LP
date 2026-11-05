@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import HeroScene from "./components/HeroScene.jsx";
 import ChapterReader from "./components/ChapterReader.jsx";
 
@@ -82,6 +82,33 @@ function usePersistentHour() {
   return [activeHour, setActiveHour];
 }
 
+function isTypingTarget(target) {
+  return (
+    target instanceof HTMLElement &&
+    (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName))
+  );
+}
+
+function usePageShortcuts({ onHour, onRead, disabled }) {
+  useEffect(() => {
+    if (disabled) return undefined;
+
+    function handleKey(event) {
+      if (event.metaKey || event.ctrlKey || event.altKey || isTypingTarget(event.target)) return;
+      const hourIndex = ["1", "2", "3"].indexOf(event.key);
+      if (hourIndex !== -1) {
+        onHour(hours[hourIndex].id);
+      } else if (event.key.toLowerCase() === "r") {
+        event.preventDefault();
+        onRead();
+      }
+    }
+
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [onHour, onRead, disabled]);
+}
+
 function ArrowMark() {
   return (
     <svg aria-hidden="true" viewBox="0 0 40 40" fill="none">
@@ -94,8 +121,14 @@ function App() {
   const [activeHour, setActiveHour] = usePersistentHour();
   const [readerOpen, setReaderOpen] = useState(false);
   const selectedHour = hours.find((hour) => hour.id === activeHour) ?? hours[0];
+  const openReader = useCallback(() => setReaderOpen(true), []);
 
   useSectionReveal();
+  usePageShortcuts({
+    onHour: setActiveHour,
+    onRead: openReader,
+    disabled: readerOpen,
+  });
 
   return (
     <div className="site-shell" data-hour={activeHour}>
