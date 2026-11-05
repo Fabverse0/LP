@@ -3,3 +3,4 @@ dist/
 .taste-skill/
 npm-debug.log*
 .claude/
+.playwright-mcp/
