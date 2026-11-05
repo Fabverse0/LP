@@ -279,8 +279,44 @@ p {
   text-transform: uppercase;
 }
 
-.hero__title span:first-child {
+.hero__title > span:first-child {
   margin-left: -0.04em;
+}
+
+.split-word {
+  display: flex;
+}
+
+.split-word .split-word__mask {
+  display: inline-block;
+  margin-left: 0;
+  margin-block: -0.08em;
+  padding-block: 0.08em;
+  overflow: hidden;
+}
+
+.split-word__letter {
+  display: inline-block;
+  transform-origin: 0 100%;
+  animation: letter-rise 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--intro-delay, 0ms) + var(--i) * 70ms);
+}
+
+@keyframes letter-rise {
+  from {
+    opacity: 0;
+    transform: translateY(105%) rotate(8deg) scaleY(1.4);
+    filter: blur(6px);
+  }
+
+  60% {
+    filter: blur(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0) scaleY(1);
+  }
 }
 
 .hero__description {

@@ -156,6 +156,30 @@ function HourWipe({ hour }) {
   return <span key={wipe} className="hour-wipe" aria-hidden="true" />;
 }
 
+function readIntroDelay() {
+  try {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // The intro curtain only plays once per session; time the title to its lift.
+    return reduced || window.sessionStorage.getItem("kage:intro-seen") === "1" ? 150 : 1650;
+  } catch {
+    return 150;
+  }
+}
+
+function SplitWord({ word, offset }) {
+  return (
+    <span className="split-word" aria-hidden="true">
+      {[...word].map((letter, index) => (
+        <span className="split-word__mask" key={`${letter}-${index}`}>
+          <span className="split-word__letter" style={{ "--i": offset + index }}>
+            {letter}
+          </span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
 function ArrowMark() {
   return (
     <svg aria-hidden="true" viewBox="0 0 40 40" fill="none">
@@ -168,6 +192,7 @@ function App() {
   const [activeHour, setActiveHour] = usePersistentHour();
   const [readerOpen, setReaderOpen] = useState(false);
   const selectedHour = hours.find((hour) => hour.id === activeHour) ?? hours[0];
+  const [introDelay] = useState(readIntroDelay);
   const [readerChapter, setReaderChapter] = useState(undefined);
   const openReader = useCallback(() => {
     setReaderChapter(readLastChapterId() ?? undefined);
@@ -201,9 +226,14 @@ function App() {
           <HeroScene />
           <EmberField hour={activeHour} />
           <div className="hero__copy">
-            <h1 className="hero__title" id="hero-title" data-reveal>
-              <span>Sisa</span>
-              <span>senja</span>
+            <h1
+              className="hero__title hero__title--split"
+              id="hero-title"
+              aria-label="Sisa senja"
+              style={{ "--intro-delay": `${introDelay}ms` }}
+            >
+              <SplitWord word="Sisa" offset={0} />
+              <SplitWord word="senja" offset={4} />
             </h1>
             <p className="hero__description" data-reveal>
               Kisah fiktif seorang ronin di bawah matahari merah.
