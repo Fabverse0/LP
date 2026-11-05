@@ -1,0 +1,133 @@
+/*
+ * SiteHeader — fixed top bar. `header.site-header` is used on the root so these
+ * rules win over the legacy absolute `.site-header` rules in styles.css.
+ */
+header.site-header {
+  position: fixed;
+  z-index: 40;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: auto;
+  padding: 0;
+  transform: none;
+  background: transparent;
+  color: var(--paper);
+  transition:
+    background-color 260ms ease,
+    translate 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.site-header__inner {
+  display: flex;
+  width: min(100%, 1680px);
+  align-items: center;
+  gap: clamp(16px, 3vw, 46px);
+  margin: 0 auto;
+  padding: 18px var(--gutter);
+  transition: padding 260ms ease;
+}
+
+.site-header__wordmark {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  margin-right: auto;
+  color: inherit;
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.site-header__list {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 3vw, 46px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-header__link {
+  position: relative;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.site-header__link::after {
+  position: absolute;
+  right: 0;
+  bottom: 8px;
+  left: 0;
+  height: 2px;
+  background: currentColor;
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
+}
+
+.site-header__link:hover {
+  color: var(--pink-paper);
+}
+
+.site-header__link.is-active {
+  color: var(--pink-paper);
+}
+
+.site-header__link.is-active::after,
+.site-header__link:hover::after {
+  transform: scaleX(1);
+}
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.site-header__cta {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 0;
+  background: var(--red-bright);
+  color: var(--paper);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.site-header__cta:hover {
+  background: var(--paper);
+  color: var(--night);
+}
+
+.site-header__wordmark:focus-visible,
+.site-header__link:focus-visible,
+.site-header__cta:focus-visible {
+  outline: 3px solid var(--paper);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  header.site-header,
+  .site-header__inner,
+  .site-header__link::after,
+  .site-header__cta {
+    transition: none;
+  }
+}
