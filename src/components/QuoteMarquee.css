@@ -1,0 +1,132 @@
+.marquee {
+  position: relative;
+  display: grid;
+  align-content: center;
+  min-height: clamp(260px, 42svh, 460px);
+  padding: clamp(40px, 7vh, 80px) 0 clamp(72px, 10vh, 104px);
+  overflow: hidden;
+  background: var(--red-bright);
+  color: var(--paper);
+  transition: background-color 420ms ease;
+}
+
+.marquee__viewport {
+  overflow: hidden;
+}
+
+.marquee__belt {
+  display: flex;
+  width: max-content;
+}
+
+.marquee__track {
+  display: flex;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.marquee__line {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  padding-right: 0.35em;
+  font-family: var(--font-display);
+  font-size: var(--size-display);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.marquee__mark {
+  color: var(--night);
+  font-family: var(--font-text);
+  font-size: 0.5em;
+  font-weight: 400;
+  letter-spacing: 0;
+  transition: color 420ms ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .marquee__belt {
+    animation: marquee-scroll var(--marquee-duration, 48s) linear infinite;
+  }
+
+  /* Fokus keyboard (bukan ketukan layar sentuh) ikut menjeda pita */
+  .marquee:has(:focus-visible) .marquee__belt,
+  .marquee.is-paused .marquee__belt {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .marquee:hover .marquee__belt {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee__toggle {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(16px, 3vh, 28px);
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px 16px;
+  background: var(--night);
+  color: var(--paper);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  font-weight: 700;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.marquee__toggle:hover {
+  background: var(--paper);
+  color: var(--night);
+}
+
+.marquee__toggle:focus-visible {
+  outline: 3px solid var(--paper);
+  outline-offset: 4px;
+}
+
+.marquee__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Tanpa gerak: pita diam, tombol tidak diperlukan */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__belt {
+    animation: none;
+    transform: none;
+  }
+
+  .marquee__viewport {
+    padding-inline: var(--gutter);
+  }
+
+  .marquee__toggle {
+    display: none;
+  }
+}
