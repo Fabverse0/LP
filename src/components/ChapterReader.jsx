@@ -84,6 +84,24 @@ export default function ChapterReader({
     onChapterChange?.(target.id);
   }
 
+  function changeChapterWithKeys(event) {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    const target = event.target;
+    if (target instanceof HTMLElement && (target.isContentEditable || target.closest("input, textarea, select"))) {
+      return;
+    }
+    const destination = event.key === "ArrowLeft" ? previous : next;
+    if (!destination) return;
+    event.preventDefault();
+    goTo(destination);
+  }
+
+  function handleKeyDown(event) {
+    changeChapterWithKeys(event);
+    keepFocusInside(event);
+  }
+
   function keepFocusInside(event) {
     if (event.key !== "Tab") return;
     const controls = [...event.currentTarget.querySelectorAll("button:not([disabled]), a[href], [tabindex='0']")]
@@ -107,7 +125,8 @@ export default function ChapterReader({
       aria-labelledby="reader-title"
       aria-describedby="reader-intro"
       onClose={onClose}
-      onKeyDown={keepFocusInside}
+      onKeyDown={handleKeyDown}
+      aria-keyshortcuts="ArrowLeft ArrowRight"
       onCancel={(event) => {
         event.preventDefault();
         onClose();
