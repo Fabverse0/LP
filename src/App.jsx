@@ -9,6 +9,7 @@ import EmberField from "./components/EmberField.jsx";
 import IntroCurtain from "./components/IntroCurtain.jsx";
 import FilmGrain from "./components/FilmGrain.jsx";
 import AmbientSound from "./components/AmbientSound.jsx";
+import Gallery from "./components/Gallery.jsx";
 
 const artwork = "/images/kage-ronin-4k.webp";
 
@@ -317,6 +318,8 @@ function App() {
         <Glossary />
 
         <JourneyMap />
+
+        <Gallery />
 
         <button
           className="closing-band"
