@@ -903,6 +903,30 @@ p {
   line-height: 0.82;
 }
 
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .site-footer__wordmark {
+      animation: wordmark-gather linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 45%;
+    }
+  }
+}
+
+@keyframes wordmark-gather {
+  from {
+    color: transparent;
+    letter-spacing: 0.35em;
+    -webkit-text-stroke: 1.5px var(--paper);
+  }
+
+  to {
+    color: var(--paper);
+    letter-spacing: -0.065em;
+    -webkit-text-stroke: 0 transparent;
+  }
+}
+
 .site-footer__return {
   display: flex;
   min-height: 88px;
