@@ -83,7 +83,26 @@ function useSectionReveal() {
       observer.observe(target);
     });
 
+    // A jump (End key, anchor, fast fling) can carry an element past the
+    // viewport without it ever intersecting. Reveal anything already above.
+    let frame = 0;
+    const revealPassed = () => {
+      frame = 0;
+      targets.forEach((target) => {
+        if (!target.classList.contains("is-visible") && target.getBoundingClientRect().top < 0) {
+          target.classList.add("is-visible");
+          observer.unobserve(target);
+        }
+      });
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(revealPassed);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
       observer.disconnect();
       page.classList.remove("has-js");
     };
