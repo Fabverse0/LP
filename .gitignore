@@ -2,3 +2,4 @@ node_modules/
 dist/
 .taste-skill/
 npm-debug.log*
+.claude/
