@@ -1,0 +1,215 @@
+.journey {
+  display: grid;
+  min-height: 90svh;
+  align-items: center;
+  padding: clamp(100px, 13vh, 160px) var(--gutter);
+  background: var(--night);
+  color: var(--paper);
+  transition: background-color 420ms ease;
+}
+
+.journey__layout {
+  display: grid;
+  width: min(100%, 1440px);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(16px, 2.5vw, 40px);
+  row-gap: clamp(32px, 5vh, 56px);
+  margin-inline: auto;
+}
+
+.journey__heading {
+  grid-column: 1 / 9;
+}
+
+.journey__eyebrow {
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.journey__heading h2 {
+  max-width: 12ch;
+  margin-top: 18px;
+  font-size: var(--size-head);
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+.journey__lead {
+  max-width: 34ch;
+  margin-top: 25px;
+  font-size: var(--size-lead);
+  line-height: 1.4;
+}
+
+/* Peta */
+
+.journey__map {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.journey__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.journey__ridge {
+  fill: none;
+  stroke: var(--blue);
+  stroke-linejoin: miter;
+  stroke-width: 3;
+  transition: stroke 420ms ease;
+}
+
+.journey__route-ghost,
+.journey__route {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.journey__route-ghost {
+  stroke: var(--blue);
+  stroke-dasharray: 0.006 0.008;
+  stroke-width: 3;
+}
+
+.journey__route {
+  stroke: var(--red-bright);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  stroke-width: 6;
+  transition: stroke 420ms ease;
+}
+
+.journey__dot {
+  fill: var(--red-bright);
+  stroke: var(--night);
+  stroke-width: 5;
+}
+
+.journey__point--soon .journey__dot {
+  fill: var(--night);
+  stroke: var(--paper);
+  stroke-dasharray: 4 4;
+  stroke-width: 3;
+}
+
+.journey__num,
+.journey__label {
+  fill: var(--paper);
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.journey__num {
+  font-size: 18px;
+}
+
+.journey__label {
+  font-size: 26px;
+  letter-spacing: -0.03em;
+}
+
+/* Legenda: daftar berurutan yang mencerminkan peta */
+
+.journey__legend {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  column-gap: clamp(16px, 2.5vw, 40px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.journey__stop {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 2px solid var(--red-bright);
+}
+
+.journey__stop--soon {
+  border-top-color: var(--paper);
+  border-top-style: dashed;
+}
+
+.journey__stop-num,
+.journey__badge {
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.journey__stop-place {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--size-lead);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.journey__stop-title {
+  font-weight: 600;
+}
+
+.journey__stop-note {
+  font-size: var(--size-small);
+  line-height: 1.5;
+}
+
+.journey__badge {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 4px 10px;
+  background: var(--paper);
+  color: var(--night);
+  text-transform: uppercase;
+}
+
+.journey__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 880px) {
+  .journey__layout {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  .journey__heading {
+    grid-column: 1 / -1;
+  }
+
+  .journey__legend {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 28px;
+  }
+}
+
+@media (max-width: 520px) {
+  .journey__label {
+    display: none;
+  }
+
+  .journey__num {
+    font-size: 30px;
+  }
+
+  .journey__legend {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
