@@ -221,9 +221,9 @@ p {
   object-position: center 52%;
 }
 
-.hero__layer--landscape { z-index: 1; }
-.hero__layer--ronin { z-index: 2; }
-.hero__layer--grass { z-index: 3; }
+.hero__layer--landscape { z-index: 1; translate: calc(var(--mx, 0) * -10px) calc(var(--my, 0) * -6px); }
+.hero__layer--ronin { z-index: 2; translate: calc(var(--mx, 0) * 22px) calc(var(--my, 0) * 10px); }
+.hero__layer--grass { z-index: 3; translate: calc(var(--mx, 0) * 44px) calc(var(--my, 0) * 18px); }
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {

@@ -38,6 +38,40 @@ export default function HeroScene() {
     };
   }, []);
 
+  useEffect(() => {
+    const element = scene.current;
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!finePointer.matches || reducedMotion.matches) return undefined;
+
+    const target = { x: 0, y: 0 };
+    const current = { x: 0, y: 0 };
+    let frame = 0;
+
+    function step() {
+      current.x += (target.x - current.x) * 0.06;
+      current.y += (target.y - current.y) * 0.06;
+      element.style.setProperty("--mx", current.x.toFixed(4));
+      element.style.setProperty("--my", current.y.toFixed(4));
+      const settled =
+        Math.abs(target.x - current.x) < 0.001 && Math.abs(target.y - current.y) < 0.001;
+      frame = settled ? 0 : requestAnimationFrame(step);
+    }
+
+    function handleMove(event) {
+      if (window.scrollY > window.innerHeight) return;
+      target.x = (event.clientX / window.innerWidth) * 2 - 1;
+      target.y = (event.clientY / window.innerHeight) * 2 - 1;
+      if (!frame) frame = requestAnimationFrame(step);
+    }
+
+    window.addEventListener("pointermove", handleMove, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", handleMove);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
   async function markLoaded(name, image) {
     try {
       // A load event can precede an async image's first decoded frame.
