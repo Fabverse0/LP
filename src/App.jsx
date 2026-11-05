@@ -6,6 +6,7 @@ import QuoteMarquee from "./components/QuoteMarquee.jsx";
 import Glossary from "./components/Glossary.jsx";
 import JourneyMap from "./components/JourneyMap.jsx";
 import EmberField from "./components/EmberField.jsx";
+import IntroCurtain from "./components/IntroCurtain.jsx";
 
 const artwork = "/images/kage-ronin-4k.webp";
 
@@ -151,6 +152,7 @@ function App() {
 
   return (
     <div className="site-shell" data-hour={activeHour}>
+      <IntroCurtain />
       <HourWipe hour={activeHour} />
       <a className="skip-link" href="#main">
         Langsung ke konten
