@@ -6,12 +6,36 @@ const AREA_PER_PARTICLE = 16000;
 const MIN_PARTICLES = 60;
 const MAX_PARTICLES = 120;
 
-const palette = {
-  colors: ["255, 112, 64", "232, 64, 52", "255, 158, 86"],
-  size: [1.1, 2.6],
-  rise: [14, 34],
-  sway: [8, 22],
-  glow: 5,
+// Each hour changes what is in the air: dusk embers, a denser hotter ember
+// storm, and at night a few slow, pale fireflies that wander more than rise.
+const palettes = {
+  dusk: {
+    colors: ["255, 112, 64", "232, 64, 52", "255, 158, 86"],
+    density: 0.8,
+    size: [1.1, 2.6],
+    rise: [14, 34],
+    sway: [8, 22],
+    span: [5, 11],
+    glow: 5,
+  },
+  ember: {
+    colors: ["255, 150, 60", "255, 196, 104", "255, 110, 44", "255, 226, 160"],
+    density: 1,
+    size: [1.2, 3],
+    rise: [24, 52],
+    sway: [10, 28],
+    span: [4, 8],
+    glow: 6,
+  },
+  night: {
+    colors: ["196, 232, 255", "150, 214, 236", "220, 248, 230"],
+    density: 0.32,
+    size: [1, 2],
+    rise: [3, 9],
+    sway: [18, 42],
+    span: [7, 14],
+    glow: 7,
+  },
 };
 
 const random = (min, max) => min + Math.random() * (max - min);
@@ -50,9 +74,11 @@ function makeSprite(rgb, glow) {
   return sprite;
 }
 
-function spawn(particle, width, height, scattered) {
+function spawn(particle, palette, width, height, scattered) {
   particle.x = random(0, width);
-  particle.y = scattered ? random(0, height) : height + random(4, 40);
+  // Fireflies at night hover anywhere in the lower field rather than rising from below.
+  if (palette === palettes.night) particle.y = random(height * 0.35, height);
+  else particle.y = scattered ? random(0, height) : height + random(4, 40);
   particle.size = random(...palette.size);
   particle.rise = random(...palette.rise);
   particle.sway = random(...palette.sway);
@@ -60,12 +86,12 @@ function spawn(particle, width, height, scattered) {
   particle.phase = random(0, Math.PI * 2);
   particle.flicker = random(1.5, 4.5);
   particle.sprite = Math.floor(random(0, palette.colors.length));
-  particle.life = 0;
-  particle.span = random(5, 11);
+  particle.life = scattered ? random(0, palette.span[0]) : 0;
+  particle.span = random(...palette.span);
   return particle;
 }
 
-export default function EmberField() {
+export default function EmberField({ hour = "dusk" }) {
   const canvas = useRef(null);
   const reducedMotion = useReducedMotion();
 
@@ -75,6 +101,7 @@ export default function EmberField() {
     const context = element?.getContext("2d");
     if (!context) return undefined;
 
+    const palette = palettes[hour] ?? palettes.dusk;
     const sprites = palette.colors.map((rgb) => makeSprite(rgb, palette.glow));
     let particles = [];
     let width = 0;
@@ -99,11 +126,10 @@ export default function EmberField() {
       element.height = Math.round(height * dpr);
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const target = Math.round(
-        Math.min(MAX_PARTICLES, Math.max(MIN_PARTICLES, (width * height) / AREA_PER_PARTICLE)),
-      );
+      const byArea = Math.min(MAX_PARTICLES, Math.max(MIN_PARTICLES, (width * height) / AREA_PER_PARTICLE));
+      const target = Math.round(byArea * palette.density);
       if (particles.length > target) particles.length = target;
-      while (particles.length < target) particles.push(spawn({}, width, height, true));
+      while (particles.length < target) particles.push(spawn({}, palette, width, height, true));
     }
 
     function draw(now) {
@@ -119,14 +145,18 @@ export default function EmberField() {
         const x = particle.x + drift;
 
         if (particle.y < -30 || particle.life > particle.span) {
-          spawn(particle, width, height, false);
+          spawn(particle, palette, width, height, false);
           continue;
         }
 
         // Fade in quickly, burn, then cool off before the end of its span.
         const progress = particle.life / particle.span;
         const envelope = Math.min(1, progress * 6) * (1 - progress * progress);
-        const flicker = 0.75 + 0.25 * Math.sin(now / 1000 * particle.flicker + particle.phase);
+        const wave = Math.sin(now / 1000 * particle.flicker + particle.phase);
+        // Embers flicker; fireflies breathe slowly on and almost fully off.
+        const flicker = palette === palettes.night
+          ? Math.max(0, wave) ** 2
+          : 0.75 + 0.25 * wave;
         const sprite = sprites[particle.sprite];
         const size = particle.size * palette.glow * 2.2;
 
@@ -150,7 +180,7 @@ export default function EmberField() {
       resizeObserver?.disconnect();
       window.removeEventListener("resize", resize);
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, hour]);
 
   if (reducedMotion) return null;
 
