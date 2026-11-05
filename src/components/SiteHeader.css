@@ -28,6 +28,19 @@ header.site-header {
   transition: padding 260ms ease;
 }
 
+header.site-header--solid {
+  background: var(--night);
+}
+
+.site-header--solid .site-header__inner {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+header.site-header--hidden {
+  translate: 0 -100%;
+}
+
 .site-header__wordmark {
   display: inline-flex;
   min-height: 44px;

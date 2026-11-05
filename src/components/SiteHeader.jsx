@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./SiteHeader.css";
 
 function sectionIds(links) {
@@ -43,6 +43,60 @@ function useActiveSection(ids) {
   return activeId;
 }
 
+const CONDENSE_AT = 80;
+const HIDE_AFTER = 160;
+const DELTA = 6;
+
+/**
+ * Solid + condensed after ~80px; slides away on scroll down and returns on scroll up.
+ * `pinned` keeps it visible (e.g. while a menu is open or focus is inside the header).
+ */
+function useHeaderScroll(pinned) {
+  const [condensed, setCondensed] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const pinnedRef = useRef(pinned);
+  pinnedRef.current = pinned;
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let frame = 0;
+
+    function update() {
+      frame = 0;
+      const y = Math.max(0, window.scrollY);
+      const delta = y - lastY;
+      setCondensed(y > CONDENSE_AT);
+
+      if (pinnedRef.current || y < HIDE_AFTER) {
+        setHidden(false);
+      } else if (delta > DELTA) {
+        setHidden(true);
+      } else if (delta < -DELTA) {
+        setHidden(false);
+      }
+
+      if (Math.abs(delta) > DELTA) lastY = y;
+    }
+
+    function onScroll() {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    }
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (pinned) setHidden(false);
+  }, [pinned]);
+
+  return { condensed, hidden };
+}
+
 export default function SiteHeader({
   links = [],
   onRead,
@@ -50,10 +104,29 @@ export default function SiteHeader({
   readControls,
   homeHref = "#top",
 }) {
+  const header = useRef(null);
   const activeId = useActiveSection(sectionIds(links));
+  const [focusWithin, setFocusWithin] = useState(false);
+  const { condensed, hidden } = useHeaderScroll(focusWithin);
+
+  const className = [
+    "site-header",
+    condensed && "site-header--solid",
+    hidden && "site-header--hidden",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <header className="site-header" id="site-header">
+    <header
+      ref={header}
+      className={className}
+      id="site-header"
+      onFocus={() => setFocusWithin(true)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setFocusWithin(false);
+      }}
+    >
       <div className="site-header__inner">
         <a className="site-header__wordmark" href={homeHref} aria-label="Kage, kembali ke awal">
           Kage
