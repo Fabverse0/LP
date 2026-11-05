@@ -74,7 +74,7 @@
 .sun-eclipse__ground {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
 }
 
@@ -112,7 +112,7 @@
   top: calc(var(--gutter) * 2.4);
   right: var(--gutter);
   left: var(--gutter);
-  z-index: 2;
+  z-index: 1;
   margin: 0;
   color: var(--night);
   font-family: var(--font-display);
@@ -142,8 +142,10 @@
   margin-left: auto;
 }
 
+/* Kata terakhir terang: siluet ronin berdiri di depannya, bukan menyatu dengannya. */
 .sun-eclipse__line:nth-of-type(3) {
   --l: clamp(0, calc((var(--p) - 0.66) / 0.08), 1);
+  color: var(--pink-paper);
 }
 
 /* Pembalikan: malam menelan merah dari pusat matahari. */
