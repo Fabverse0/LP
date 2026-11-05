@@ -169,16 +169,41 @@ export default function EmberField({ hour = "dusk" }) {
       frame = requestAnimationFrame(draw);
     }
 
+    // Only spend frames while the hero is on screen and the tab is visible.
+    let inView = true;
+    function updatePlayback() {
+      const shouldRun = inView && !document.hidden;
+      if (shouldRun && !frame) {
+        last = 0; // avoid a jump after a long pause
+        frame = requestAnimationFrame(draw);
+      } else if (!shouldRun && frame) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      }
+    }
+
     resize();
     const resizeObserver = "ResizeObserver" in window ? new ResizeObserver(resize) : null;
     resizeObserver?.observe(element);
     if (!resizeObserver) window.addEventListener("resize", resize);
-    frame = requestAnimationFrame(draw);
+
+    const intersection = "IntersectionObserver" in window
+      ? new IntersectionObserver(([entry]) => {
+          inView = entry.isIntersecting;
+          updatePlayback();
+        })
+      : null;
+    intersection?.observe(element);
+    document.addEventListener("visibilitychange", updatePlayback);
+    updatePlayback();
 
     return () => {
       cancelAnimationFrame(frame);
+      frame = 0;
       resizeObserver?.disconnect();
+      intersection?.disconnect();
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", updatePlayback);
     };
   }, [reducedMotion, hour]);
 
