@@ -97,6 +97,66 @@ function useHeaderScroll(pinned) {
   return { condensed, hidden };
 }
 
+const MOBILE_QUERY = "(max-width: 679.98px)";
+
+/**
+ * While the full-screen menu is open: lock body scroll, make the rest of the page inert,
+ * move focus into the menu, close on Escape or when the viewport grows past mobile,
+ * and hand focus back to the toggle on close.
+ */
+function useMobileMenu({ open, setOpen, header, toggle, menu }) {
+  useEffect(() => {
+    if (!open) return undefined;
+
+    const headerElement = header.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const siblings = headerElement?.parentElement
+      ? [...headerElement.parentElement.children].filter(
+          (element) => element !== headerElement && !element.inert,
+        )
+      : [];
+    siblings.forEach((element) => {
+      element.inert = true;
+    });
+
+    menu.current?.querySelector("a[href]")?.focus({ preventScroll: true });
+
+    function onKeyDown(event) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+      }
+    }
+
+    const media = window.matchMedia(MOBILE_QUERY);
+    function onMediaChange(event) {
+      if (!event.matches) setOpen(false);
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    media.addEventListener?.("change", onMediaChange);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      siblings.forEach((element) => {
+        element.inert = false;
+      });
+      document.removeEventListener("keydown", onKeyDown);
+      media.removeEventListener?.("change", onMediaChange);
+
+      const focusLost =
+        !document.activeElement ||
+        document.activeElement === document.body ||
+        menu.current?.contains(document.activeElement);
+      if (focusLost && toggle.current?.getClientRects().length) {
+        toggle.current.focus({ preventScroll: true });
+      }
+    };
+  }, [open, setOpen, header, toggle, menu]);
+}
+
 export default function SiteHeader({
   links = [],
   onRead,
@@ -105,23 +165,51 @@ export default function SiteHeader({
   homeHref = "#top",
 }) {
   const header = useRef(null);
+  const toggle = useRef(null);
+  const menu = useRef(null);
   const activeId = useActiveSection(sectionIds(links));
   const [focusWithin, setFocusWithin] = useState(false);
-  const { condensed, hidden } = useHeaderScroll(focusWithin);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { condensed, hidden } = useHeaderScroll(focusWithin || menuOpen);
+
+  useMobileMenu({ open: menuOpen, setOpen: setMenuOpen, header, toggle, menu });
 
   const className = [
     "site-header",
     condensed && "site-header--solid",
-    hidden && "site-header--hidden",
+    hidden && !menuOpen && "site-header--hidden",
+    menuOpen && "site-header--menu-open",
   ]
     .filter(Boolean)
     .join(" ");
+
+  function handleRead() {
+    setMenuOpen(false);
+    onRead?.();
+  }
+
+  function trapFocus(event) {
+    if (!menuOpen || event.key !== "Tab") return;
+    const controls = [...header.current.querySelectorAll("a[href], button:not([disabled])")].filter(
+      (element) => element.getClientRects().length > 0,
+    );
+    const first = controls[0];
+    const last = controls[controls.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last?.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first?.focus();
+    }
+  }
 
   return (
     <header
       ref={header}
       className={className}
       id="site-header"
+      onKeyDown={trapFocus}
       onFocus={() => setFocusWithin(true)}
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) setFocusWithin(false);
@@ -155,13 +243,51 @@ export default function SiteHeader({
           <button
             className="site-header__cta"
             type="button"
-            onClick={() => onRead?.()}
+            onClick={handleRead}
             aria-haspopup={readControls ? "dialog" : undefined}
             aria-controls={readControls}
           >
             {readLabel}
           </button>
+          <button
+            ref={toggle}
+            className="site-header__toggle"
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="site-menu"
+            aria-label={menuOpen ? "Tutup menu" : "Buka menu"}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <span className="site-header__toggle-bar" aria-hidden="true" />
+            <span className="site-header__toggle-bar" aria-hidden="true" />
+          </button>
         </div>
+      </div>
+
+      <div ref={menu} className="site-header__menu" id="site-menu" hidden={!menuOpen}>
+        <nav className="site-header__menu-nav" aria-label="Menu utama">
+          <ol className="site-header__menu-list">
+            {links.map((link, index) => {
+              const isActive = link.href === `#${activeId}`;
+              return (
+                <li key={link.href}>
+                  <a
+                    className={`site-header__menu-link${isActive ? " is-active" : ""}`}
+                    href={link.href}
+                    aria-current={isActive ? "true" : undefined}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <span className="site-header__menu-index" aria-hidden="true">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    {link.label}
+                  </a>
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
+        <p className="site-header__menu-note">Kisah fiktif tentang ronin terakhir.</p>
       </div>
     </header>
   );
