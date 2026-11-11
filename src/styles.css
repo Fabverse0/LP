@@ -327,6 +327,38 @@ p {
   line-height: 1.4;
 }
 
+.hero__cta {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  gap: 18px;
+  margin-top: 26px;
+  padding: 12px 20px;
+  background: var(--red-bright);
+  color: var(--paper);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--size-body);
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: background-color 180ms ease, transform 220ms ease;
+}
+
+.hero__cta svg {
+  width: 26px;
+  height: 26px;
+  transition: transform 220ms ease;
+}
+
+.hero__cta:hover {
+  background: var(--paper);
+  color: var(--red);
+}
+
+.hero__cta:hover svg {
+  transform: translate(3px, -3px);
+}
+
 .hero-hours {
   display: flex;
   flex-wrap: wrap;
@@ -1081,6 +1113,10 @@ p {
   .hero-hours {
     justify-content: center;
     margin-top: 12px;
+  }
+
+  .hero__cta {
+    margin-top: 18px;
   }
 
   .story,

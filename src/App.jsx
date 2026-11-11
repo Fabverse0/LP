@@ -271,6 +271,15 @@ function App() {
                 </button>
               ))}
             </div>
+            <button
+              className="hero__cta"
+              type="button"
+              onClick={openReader}
+              aria-haspopup="dialog"
+              aria-controls="chapter-reader"
+            >
+              Mulai membaca <ArrowMark />
+            </button>
           </div>
         </section>
 
