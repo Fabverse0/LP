@@ -201,6 +201,15 @@ function SplitWord({ word, offset }) {
   );
 }
 
+const THEME_COLORS = { dusk: "#0b1118", ember: "#2c2528", night: "#07151f" };
+
+function useThemeColor(hour) {
+  useEffect(() => {
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", THEME_COLORS[hour] ?? THEME_COLORS.dusk);
+  }, [hour]);
+}
+
 function ArrowMark() {
   return (
     <svg aria-hidden="true" viewBox="0 0 40 40" fill="none">
@@ -225,6 +234,7 @@ function App() {
   }, []);
 
   useSectionReveal();
+  useThemeColor(activeHour);
   usePageShortcuts({
     onHour: setActiveHour,
     onRead: openReader,
