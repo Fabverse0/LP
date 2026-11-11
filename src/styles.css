@@ -34,6 +34,18 @@ html {
   background: var(--night);
 }
 
+html {
+  scrollbar-color: #b51f32 #0b1118;
+}
+
+html:has([data-hour="ember"]) {
+  scrollbar-color: #cc412a #2c2528;
+}
+
+html:has([data-hour="night"]) {
+  scrollbar-color: #244d61 #07151f;
+}
+
 body {
   min-width: 320px;
   margin: 0;
