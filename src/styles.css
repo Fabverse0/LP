@@ -844,6 +844,14 @@ p {
   object-position: 64% 45%;
 }
 
+.glossary,
+.site-footer {
+  /* Skip rendering until near the viewport; the intrinsic size keeps the
+     scrollbar stable while the real height is unknown. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
 .site-footer {
   display: flex;
   flex-direction: column;
