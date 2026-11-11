@@ -2,6 +2,13 @@
   "name": "kage-landing-page",
   "private": true,
   "version": "0.1.0",
+  "description": "Kage, a quiet cinematic visual story about a lone ronin at dusk.",
+  "keywords": [
+    "landing-page",
+    "storytelling",
+    "react",
+    "vite"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
