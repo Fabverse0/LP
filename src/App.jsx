@@ -18,7 +18,7 @@ import ScrollProgress from "./components/ScrollProgress.jsx";
 import BackToTop from "./components/BackToTop.jsx";
 import Newsletter from "./components/Newsletter.jsx";
 import KeyboardHelp from "./components/KeyboardHelp.jsx";
-import { readLastChapterId } from "./content/chapters.js";
+import { getChapter, readLastChapterId } from "./content/chapters.js";
 
 const artwork = "/images/kage-ronin-4k.webp";
 
@@ -210,6 +210,19 @@ function useThemeColor(hour) {
   }, [hour]);
 }
 
+const BASE_TITLE = "Kage — The Last Light";
+
+function useReadingTitle(readerOpen, chapterId) {
+  useEffect(() => {
+    if (!readerOpen) return undefined;
+    const chapter = getChapter(chapterId ?? "jalan-tanpa-tuan");
+    if (chapter) document.title = `${chapter.title} · Kage`;
+    return () => {
+      document.title = BASE_TITLE;
+    };
+  }, [readerOpen, chapterId]);
+}
+
 function ArrowMark() {
   return (
     <svg aria-hidden="true" viewBox="0 0 40 40" fill="none">
@@ -235,6 +248,7 @@ function App() {
 
   useSectionReveal();
   useThemeColor(activeHour);
+  useReadingTitle(readerOpen, readerChapter);
   usePageShortcuts({
     onHour: setActiveHour,
     onRead: openReader,
