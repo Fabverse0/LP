@@ -482,6 +482,9 @@ function App() {
             <ArrowMark />
           </a>
         </div>
+        <p className="site-footer__credit">
+          © 2026 Kage. Kisah dan tokohnya fiktif. Dibangun dengan React dan Vite.
+        </p>
       </footer>
       <BackToTop />
       <KeyboardHelp shortcuts={shortcuts} />
