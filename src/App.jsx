@@ -281,6 +281,10 @@ function App() {
               Mulai membaca <ArrowMark />
             </button>
           </div>
+          <a className="hero__cue" href="#story" aria-label="Gulir ke kisah">
+            <span>Gulir</span>
+            <span className="hero__cue-line" aria-hidden="true" />
+          </a>
         </section>
 
         <section className="story chapter" id="story" aria-labelledby="story-title">
