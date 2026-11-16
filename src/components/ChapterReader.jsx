@@ -4,6 +4,7 @@ import {
   chapters,
   getChapter,
   readingMinutes,
+  markChapterRead,
   rememberLastChapter,
 } from "../content/chapters.js";
 import "./ChapterReader.css";
@@ -116,6 +117,7 @@ export default function ChapterReader({
     const distance = element.scrollHeight - element.clientHeight;
     const ratio = distance > 0 ? Math.min(1, Math.max(0, element.scrollTop / distance)) : 0;
     progress.current.style.transform = `scaleX(${ratio})`;
+    if (distance > 0 && ratio >= 0.92) markChapterRead(currentId);
   }
 
   function scheduleProgress() {
