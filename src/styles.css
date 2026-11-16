@@ -354,6 +354,25 @@ p {
   line-height: 1.4;
 }
 
+.hero__kanji {
+  position: absolute;
+  top: 12%;
+  right: calc(var(--gutter) + 2vw);
+  color: transparent;
+  font-family: "Noto Serif JP", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: clamp(14rem, 32vw, 36rem);
+  line-height: 0.85;
+  pointer-events: none;
+  user-select: none;
+  -webkit-text-stroke: 2px rgb(255 255 255 / 20%);
+}
+
+@media (max-width: 680px) {
+  .hero__kanji {
+    display: none;
+  }
+}
+
 .hero__cta {
   display: inline-flex;
   min-height: 52px;

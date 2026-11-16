@@ -270,6 +270,9 @@ function App() {
         <section className="hero" id="top" aria-labelledby="hero-title">
           <HeroScene />
           <EmberField hour={activeHour} />
+          <span className="hero__kanji" aria-hidden="true">
+            影
+          </span>
           <div className="hero__copy">
             <h1
               className="hero__title hero__title--split"
