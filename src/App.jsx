@@ -218,6 +218,29 @@ function useThemeColor(hour) {
 
 const totalMinutes = availableChapters.reduce((sum, chapter) => sum + readingMinutes(chapter), 0);
 
+const READ_HASH = /^#baca\/([a-z0-9-]+)$/;
+
+function useChapterLink(readerOpen, chapterId, openChapter) {
+  // A shared link like /#baca/sungai-yang-sama opens that chapter on arrival.
+  useEffect(() => {
+    const match = window.location.hash.match(READ_HASH);
+    const chapter = match ? getChapter(match[1]) : null;
+    if (chapter?.status === "available") openChapter(chapter.id);
+  }, [openChapter]);
+
+  // While reading, the address bar points at the chapter so it can be copied.
+  useEffect(() => {
+    if (!readerOpen) return undefined;
+    const chapter = getChapter(chapterId ?? "jalan-tanpa-tuan");
+    if (!chapter) return undefined;
+    const { pathname, search } = window.location;
+    window.history.replaceState(null, "", `${pathname}${search}#baca/${chapter.id}`);
+    return () => {
+      window.history.replaceState(null, "", `${pathname}${search}`);
+    };
+  }, [readerOpen, chapterId]);
+}
+
 const BASE_TITLE = "Kage: The Last Light";
 
 function useReadingTitle(readerOpen, chapterId) {
@@ -257,6 +280,7 @@ function App() {
   useSectionReveal();
   useThemeColor(activeHour);
   useReadingTitle(readerOpen, readerChapter);
+  useChapterLink(readerOpen, readerChapter, openChapter);
   usePageShortcuts({
     onHour: setActiveHour,
     onRead: openReader,
