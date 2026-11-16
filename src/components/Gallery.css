@@ -295,3 +295,9 @@
   .gallery__grid > .gallery__item--jalan { grid-column: 2 / -1; }
   .gallery__grid > .gallery__item--langit { grid-column: 1 / 4; }
 }
+
+/* The global focus ring is paper-white, which vanishes on this light field. */
+.gallery a:focus-visible,
+.gallery button:focus-visible {
+  outline-color: var(--night);
+}
