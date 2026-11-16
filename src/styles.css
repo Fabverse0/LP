@@ -405,6 +405,28 @@ p {
   transform: translate(3px, -3px);
 }
 
+.hero__meta {
+  position: absolute;
+  z-index: 5;
+  right: var(--gutter);
+  bottom: 28px;
+  display: flex;
+  max-width: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  text-align: right;
+  text-transform: uppercase;
+}
+
+@media (max-width: 680px) {
+  .hero__meta {
+    display: none;
+  }
+}
+
 .hero__cue {
   position: absolute;
   z-index: 5;

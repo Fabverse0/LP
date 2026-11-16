@@ -18,7 +18,13 @@ import ScrollProgress from "./components/ScrollProgress.jsx";
 import BackToTop from "./components/BackToTop.jsx";
 import Newsletter from "./components/Newsletter.jsx";
 import KeyboardHelp from "./components/KeyboardHelp.jsx";
-import { getChapter, readLastChapterId } from "./content/chapters.js";
+import {
+  availableChapters,
+  chapters,
+  getChapter,
+  readingMinutes,
+  readLastChapterId,
+} from "./content/chapters.js";
 
 const artwork = "/images/kage-ronin-4k.webp";
 
@@ -210,6 +216,8 @@ function useThemeColor(hour) {
   }, [hour]);
 }
 
+const totalMinutes = availableChapters.reduce((sum, chapter) => sum + readingMinutes(chapter), 0);
+
 const BASE_TITLE = "Kage: The Last Light";
 
 function useReadingTitle(readerOpen, chapterId) {
@@ -308,6 +316,12 @@ function App() {
               Mulai membaca <ArrowMark />
             </button>
           </div>
+          <p className="hero__meta">
+            <span>
+              {availableChapters.length} dari {chapters.length} bab terbuka
+            </span>
+            <span>{totalMinutes} menit baca</span>
+          </p>
           <a className="hero__cue" href="#story" aria-label="Gulir ke kisah">
             <span>Gulir</span>
             <span className="hero__cue-line" aria-hidden="true" />
