@@ -1,0 +1,50 @@
+.error-page {
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+  padding: 10vh var(--gutter);
+  background: var(--night);
+  color: var(--paper);
+}
+
+.error-page__mark {
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.error-page__title {
+  max-width: 9ch;
+  font-size: var(--size-display);
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.error-page__text {
+  max-width: 40ch;
+  font-size: var(--size-lead);
+  line-height: 1.45;
+}
+
+.error-page__retry {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 52px;
+  align-items: center;
+  padding: 12px 22px;
+  background: var(--red-bright);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: var(--size-body);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.error-page__retry:hover {
+  background: var(--paper);
+  color: var(--red);
+}
