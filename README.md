@@ -1,4 +1,4 @@
-# Kage — The Last Light
+# Kage: The Last Light
 
 Situs visual fiktif tentang seorang ronin di bawah matahari merah. Dibangun dengan
 React 19 dan Vite 7, tanpa library animasi: semua gerak memakai CSS, Web Animations

@@ -1,5 +1,5 @@
 /*
- * SiteHeader — fixed top bar. `header.site-header` is used on the root so these
+ * SiteHeader: fixed top bar. `header.site-header` is used on the root so these
  * rules win over the legacy absolute `.site-header` rules in styles.css.
  */
 header.site-header {

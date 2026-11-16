@@ -210,7 +210,7 @@ function useThemeColor(hour) {
   }, [hour]);
 }
 
-const BASE_TITLE = "Kage — The Last Light";
+const BASE_TITLE = "Kage: The Last Light";
 
 function useReadingTitle(readerOpen, chapterId) {
   useEffect(() => {
