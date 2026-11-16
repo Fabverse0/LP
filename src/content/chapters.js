@@ -102,3 +102,26 @@ export function rememberLastChapter(id) {
   }
   window.dispatchEvent(new CustomEvent(LAST_CHAPTER_EVENT, { detail: id }));
 }
+
+export const READ_KEY = "kage:read";
+export const READ_EVENT = "kage:read";
+
+export function readChapterIds() {
+  try {
+    const stored = JSON.parse(window.localStorage.getItem(READ_KEY) ?? "[]");
+    return Array.isArray(stored) ? stored.filter((id) => getChapter(id)) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function markChapterRead(id) {
+  const ids = readChapterIds();
+  if (ids.includes(id)) return;
+  try {
+    window.localStorage.setItem(READ_KEY, JSON.stringify([...ids, id]));
+  } catch {
+    return;
+  }
+  window.dispatchEvent(new CustomEvent(READ_EVENT, { detail: id }));
+}
