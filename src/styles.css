@@ -72,6 +72,21 @@ button {
   border: 0;
 }
 
+button:not(:disabled),
+a[href],
+summary,
+select,
+label[for],
+[role="button"],
+[role="tab"] {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
 button:focus-visible,
 a:focus-visible {
   outline: 3px solid var(--paper);
