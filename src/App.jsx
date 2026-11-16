@@ -390,6 +390,10 @@ function App() {
                 {selectedHour.description}
               </p>
 
+              <p className="hour__keys">
+                Di papan ketik, tekan <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> untuk berganti.
+              </p>
+
               <div className="hour-index" role="group" aria-label="Pilih waktu pada adegan">
                 {hours.map((hour) => (
                   <button
