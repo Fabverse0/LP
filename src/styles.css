@@ -72,6 +72,21 @@ button {
   border: 0;
 }
 
+button:not(:disabled),
+a[href],
+summary,
+select,
+label[for],
+[role="button"],
+[role="tab"] {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
 button:focus-visible,
 a:focus-visible {
   outline: 3px solid var(--paper);
@@ -339,6 +354,25 @@ p {
   line-height: 1.4;
 }
 
+.hero__kanji {
+  position: absolute;
+  top: 12%;
+  right: calc(var(--gutter) + 2vw);
+  color: transparent;
+  font-family: "Noto Serif JP", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: clamp(14rem, 32vw, 36rem);
+  line-height: 0.85;
+  pointer-events: none;
+  user-select: none;
+  -webkit-text-stroke: 2px rgb(255 255 255 / 20%);
+}
+
+@media (max-width: 680px) {
+  .hero__kanji {
+    display: none;
+  }
+}
+
 .hero__cta {
   display: inline-flex;
   min-height: 52px;
@@ -369,6 +403,28 @@ p {
 
 .hero__cta:hover svg {
   transform: translate(3px, -3px);
+}
+
+.hero__meta {
+  position: absolute;
+  z-index: 5;
+  right: var(--gutter);
+  bottom: 28px;
+  display: flex;
+  max-width: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  text-align: right;
+  text-transform: uppercase;
+}
+
+@media (max-width: 680px) {
+  .hero__meta {
+    display: none;
+  }
 }
 
 .hero__cue {
@@ -598,6 +654,27 @@ p {
   min-height: 1.6em;
   margin-top: 28px;
   font-size: var(--size-body);
+}
+
+.hour__keys {
+  margin-top: 14px;
+  font-size: var(--size-small);
+}
+
+.hour__keys kbd {
+  display: inline-block;
+  min-width: 1.9em;
+  padding: 1px 6px 2px;
+  border: 2px solid currentColor;
+  font-family: var(--font-display);
+  font-size: 0.85em;
+  text-align: center;
+}
+
+@media (hover: none) {
+  .hour__keys {
+    display: none;
+  }
 }
 
 .hour-index {

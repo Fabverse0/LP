@@ -18,7 +18,13 @@ import ScrollProgress from "./components/ScrollProgress.jsx";
 import BackToTop from "./components/BackToTop.jsx";
 import Newsletter from "./components/Newsletter.jsx";
 import KeyboardHelp from "./components/KeyboardHelp.jsx";
-import { getChapter, readLastChapterId } from "./content/chapters.js";
+import {
+  availableChapters,
+  chapters,
+  getChapter,
+  readingMinutes,
+  readLastChapterId,
+} from "./content/chapters.js";
 
 const artwork = "/images/kage-ronin-4k.webp";
 
@@ -210,7 +216,32 @@ function useThemeColor(hour) {
   }, [hour]);
 }
 
-const BASE_TITLE = "Kage — The Last Light";
+const totalMinutes = availableChapters.reduce((sum, chapter) => sum + readingMinutes(chapter), 0);
+
+const READ_HASH = /^#baca\/([a-z0-9-]+)$/;
+
+function useChapterLink(readerOpen, chapterId, openChapter) {
+  // A shared link like /#baca/sungai-yang-sama opens that chapter on arrival.
+  useEffect(() => {
+    const match = window.location.hash.match(READ_HASH);
+    const chapter = match ? getChapter(match[1]) : null;
+    if (chapter?.status === "available") openChapter(chapter.id);
+  }, [openChapter]);
+
+  // While reading, the address bar points at the chapter so it can be copied.
+  useEffect(() => {
+    if (!readerOpen) return undefined;
+    const chapter = getChapter(chapterId ?? "jalan-tanpa-tuan");
+    if (!chapter) return undefined;
+    const { pathname, search } = window.location;
+    window.history.replaceState(null, "", `${pathname}${search}#baca/${chapter.id}`);
+    return () => {
+      window.history.replaceState(null, "", `${pathname}${search}`);
+    };
+  }, [readerOpen, chapterId]);
+}
+
+const BASE_TITLE = "Kage: The Last Light";
 
 function useReadingTitle(readerOpen, chapterId) {
   useEffect(() => {
@@ -249,6 +280,7 @@ function App() {
   useSectionReveal();
   useThemeColor(activeHour);
   useReadingTitle(readerOpen, readerChapter);
+  useChapterLink(readerOpen, readerChapter, openChapter);
   usePageShortcuts({
     onHour: setActiveHour,
     onRead: openReader,
@@ -270,6 +302,9 @@ function App() {
         <section className="hero" id="top" aria-labelledby="hero-title">
           <HeroScene />
           <EmberField hour={activeHour} />
+          <span className="hero__kanji" aria-hidden="true">
+            影
+          </span>
           <div className="hero__copy">
             <h1
               className="hero__title hero__title--split"
@@ -305,6 +340,12 @@ function App() {
               Mulai membaca <ArrowMark />
             </button>
           </div>
+          <p className="hero__meta">
+            <span>
+              {availableChapters.length} dari {chapters.length} bab terbuka
+            </span>
+            <span>{totalMinutes} menit baca</span>
+          </p>
           <a className="hero__cue" href="#story" aria-label="Gulir ke kisah">
             <span>Gulir</span>
             <span className="hero__cue-line" aria-hidden="true" />
@@ -371,6 +412,10 @@ function App() {
               </p>
               <p className="hour__detail" aria-live="polite" aria-atomic="true">
                 {selectedHour.description}
+              </p>
+
+              <p className="hour__keys">
+                Di papan ketik, tekan <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> untuk berganti.
               </p>
 
               <div className="hour-index" role="group" aria-label="Pilih waktu pada adegan">

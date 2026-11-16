@@ -1,4 +1,4 @@
-# Kage — The Last Light
+# Kage: The Last Light
 
 Situs visual fiktif tentang seorang ronin di bawah matahari merah. Dibangun dengan
 React 19 dan Vite 7, tanpa library animasi: semua gerak memakai CSS, Web Animations
@@ -33,6 +33,15 @@ Build produksi: `npm run build`, lalu `npm run preview`.
 
 `R` baca bab terakhir, `1` `2` `3` ganti suasana, `←` `→` pindah bab di pembaca,
 `?` tampilkan daftar pintasan.
+
+## Tautan ke bab
+
+Bab bisa dibuka langsung dengan `/#baca/<id>`, misalnya `/#baca/sungai-yang-sama`.
+Saat pembaca terbuka, alamat di browser otomatis menunjuk ke bab yang sedang dibaca.
+Bab yang sudah digulir sampai hampir habis ditandai "Selesai" di daftar bab
+(disimpan di `localStorage`, tidak ada data yang dikirim ke mana pun).
+
+Arah desain dan alasannya ada di [DESIGN.md](DESIGN.md).
 
 ## Struktur
 

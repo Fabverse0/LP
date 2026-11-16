@@ -83,7 +83,7 @@ function ShareButton() {
   async function handleShare() {
     const url = `${window.location.origin}${window.location.pathname}`;
     const data = {
-      title: document.title || "Kage — The Last Light",
+      title: document.title || "Kage: The Last Light",
       text: "Kage, kisah fiktif seorang ronin di bawah matahari merah.",
       url,
     };
