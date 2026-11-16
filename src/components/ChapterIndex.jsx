@@ -5,6 +5,8 @@ import {
   availableChapters,
   chapters,
   getChapter,
+  readChapterIds,
+  READ_EVENT,
   readLastChapterId,
   readingMinutes,
 } from "../content/chapters.js";
@@ -44,8 +46,26 @@ function useLastChapterId() {
   return lastId;
 }
 
+function useReadIds() {
+  const [ids, setIds] = useState([]);
+
+  useEffect(() => {
+    const sync = () => setIds(readChapterIds());
+    sync();
+    window.addEventListener(READ_EVENT, sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener(READ_EVENT, sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+
+  return ids;
+}
+
 export default function ChapterIndex({ onOpen }) {
   const lastChapter = getChapter(useLastChapterId());
+  const readIds = useReadIds();
   const openWord = String(countWords[availableChapters.length] ?? availableChapters.length);
   const openCount = openWord[0].toUpperCase() + openWord.slice(1);
 
@@ -93,7 +113,9 @@ export default function ChapterIndex({ onOpen }) {
                   <span className="chapter-index__intro">{chapter.intro}</span>
                 </span>
                 <span className="chapter-index__meta">
-                  {available ? `${readingMinutes(chapter)} menit baca` : "Segera"}
+                  {available
+                    ? `${readingMinutes(chapter)} menit baca${readIds.includes(chapter.id) ? " · Selesai" : ""}`
+                    : "Segera"}
                 </span>
                 <span className="chapter-index__arrow">
                   <Arrow />
