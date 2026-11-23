@@ -464,3 +464,40 @@ button.reader__turn:hover {
     margin-top: 24pt;
   }
 }
+
+.reader__share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+}
+
+.reader__copy {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 2px solid currentColor;
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.reader__copy:hover {
+  background: var(--paper);
+  color: var(--night);
+}
+
+.reader__copy-note {
+  max-width: 44ch;
+  overflow-wrap: anywhere;
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+}
+
+@media print {
+  .reader__share {
+    display: none;
+  }
+}

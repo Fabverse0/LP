@@ -5,7 +5,9 @@ import {
   getChapter,
   readingMinutes,
   markChapterRead,
+  readScroll,
   rememberLastChapter,
+  saveScroll,
 } from "../content/chapters.js";
 import "./ChapterReader.css";
 
@@ -68,6 +70,8 @@ export default function ChapterReader({
   const title = useRef(null);
   const navigated = useRef(false);
   const progress = useRef(null);
+  const saveTimer = useRef(0);
+  const [copyNote, setCopyNote] = useState("");
   const frame = useRef(0);
   const [currentId, setCurrentId] = useState(() => resolveChapterId(chapterId));
   const [requested, setRequested] = useState(null);
@@ -118,23 +122,57 @@ export default function ChapterReader({
     const ratio = distance > 0 ? Math.min(1, Math.max(0, element.scrollTop / distance)) : 0;
     progress.current.style.transform = `scaleX(${ratio})`;
     if (distance > 0 && ratio >= 0.92) markChapterRead(currentId);
+    if (distance > 0) {
+      window.clearTimeout(saveTimer.current);
+      saveTimer.current = window.setTimeout(
+        () => saveScroll(currentId, ratio >= 0.92 ? 0 : ratio),
+        300,
+      );
+    }
   }
 
   function scheduleProgress() {
     if (!frame.current) frame.current = requestAnimationFrame(updateProgress);
   }
 
-  useEffect(() => () => cancelAnimationFrame(frame.current), []);
+  useEffect(
+    () => () => {
+      cancelAnimationFrame(frame.current);
+      window.clearTimeout(saveTimer.current);
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!isOpen) return;
-    dialog.current.scrollTop = 0;
+    const element = dialog.current;
+    element.scrollTop = 0;
+    if (!navigated.current) {
+      // Reopening the same chapter picks up where the reader stopped.
+      const saved = readScroll(currentId);
+      const distance = element.scrollHeight - element.clientHeight;
+      if (saved > 0 && distance > 0) element.scrollTop = saved * distance;
+    }
     updateProgress();
     if (navigated.current) {
       title.current?.focus({ preventScroll: true });
       navigated.current = false;
     }
   }, [currentId, isOpen]);
+
+  useEffect(() => setCopyNote(""), [currentId, isOpen]);
+
+  async function copyChapterLink() {
+    const { origin, pathname } = window.location;
+    const link = `${origin}${pathname}#baca/${currentId}`;
+    try {
+      await navigator.clipboard.writeText(link);
+      setCopyNote("Tautan disalin.");
+    } catch {
+      // Clipboard access can be refused; show the link so it can be copied by hand.
+      setCopyNote(link);
+    }
+  }
 
   function chooseTextSize(size) {
     setTextSize(size);
@@ -279,6 +317,14 @@ export default function ChapterReader({
           ))}
           <footer className="reader__ending">
             <p>Akhir bab {ordinal(chapter.number)}.</p>
+            <div className="reader__share">
+              <button className="reader__copy" type="button" onClick={copyChapterLink}>
+                Salin tautan bab
+              </button>
+              <p className="reader__copy-note" role="status">
+                {copyNote}
+              </p>
+            </div>
             <div className="reader__pager">
               {previous && (
                 <button className="reader__turn reader__turn--prev" type="button" onClick={() => goTo(previous)}>
