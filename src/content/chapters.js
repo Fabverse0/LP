@@ -125,3 +125,27 @@ export function markChapterRead(id) {
   }
   window.dispatchEvent(new CustomEvent(READ_EVENT, { detail: id }));
 }
+
+const SCROLL_KEY = "kage:scroll";
+
+function readScrollMap() {
+  try {
+    const stored = JSON.parse(window.localStorage.getItem(SCROLL_KEY) ?? "{}");
+    return stored && typeof stored === "object" ? stored : {};
+  } catch {
+    return {};
+  }
+}
+
+export function readScroll(id) {
+  const ratio = Number(readScrollMap()[id]);
+  return Number.isFinite(ratio) ? Math.min(1, Math.max(0, ratio)) : 0;
+}
+
+export function saveScroll(id, ratio) {
+  try {
+    window.localStorage.setItem(SCROLL_KEY, JSON.stringify({ ...readScrollMap(), [id]: ratio }));
+  } catch {
+    // Storage may be blocked; the position just isn't kept.
+  }
+}
