@@ -369,7 +369,7 @@ function App() {
               aria-label="Siluet ronin di antara rumput gelap, menghadap matahari merah."
               data-reveal
             >
-              <img className="story__art-image" src={artwork} alt="" aria-hidden="true" />
+              <img loading="lazy" decoding="async" className="story__art-image" src={artwork} alt="" aria-hidden="true" />
             </div>
 
             <div className="story__narrative">
@@ -428,7 +428,7 @@ function App() {
                     onClick={() => setActiveHour(hour.id)}
                   >
                     <span className="hour-index__label">{hour.label}</span>
-                    <img
+                    <img loading="lazy" decoding="async"
                       className="hour-index__preview"
                       src={artwork}
                       alt=""
@@ -442,7 +442,7 @@ function App() {
 
             <div className="hour__visual" data-reveal>
               <figure className={`hour-preview hour-preview--${activeHour}`}>
-                <img className="hour-preview__image" src={artwork} alt="" aria-hidden="true" />
+                <img loading="lazy" decoding="async" className="hour-preview__image" src={artwork} alt="" aria-hidden="true" />
                 <span className="hour-preview__caption">{selectedHour.label}</span>
               </figure>
               <p className="hour__credit">Satu artwork, tiga suasana warna.</p>
@@ -478,7 +478,7 @@ function App() {
           <span className="closing-band__arrow" data-reveal>
             <ArrowMark />
           </span>
-          <img
+          <img loading="lazy" decoding="async"
             className="closing-band__still"
             src={artwork}
             alt="Cakrawala merah dan siluet ronin, dipotong lebih dekat."
@@ -496,7 +496,7 @@ function App() {
           <p className="site-footer__note" data-reveal>
             Kisah visual fiktif, dibangun dari satu gambar.
           </p>
-          <img
+          <img loading="lazy" decoding="async"
             className="site-footer__still"
             src={artwork}
             alt=""
