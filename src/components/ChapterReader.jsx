@@ -71,6 +71,7 @@ export default function ChapterReader({
   const navigated = useRef(false);
   const progress = useRef(null);
   const saveTimer = useRef(0);
+  const [copyNote, setCopyNote] = useState("");
   const frame = useRef(0);
   const [currentId, setCurrentId] = useState(() => resolveChapterId(chapterId));
   const [requested, setRequested] = useState(null);
@@ -158,6 +159,20 @@ export default function ChapterReader({
       navigated.current = false;
     }
   }, [currentId, isOpen]);
+
+  useEffect(() => setCopyNote(""), [currentId, isOpen]);
+
+  async function copyChapterLink() {
+    const { origin, pathname } = window.location;
+    const link = `${origin}${pathname}#baca/${currentId}`;
+    try {
+      await navigator.clipboard.writeText(link);
+      setCopyNote("Tautan disalin.");
+    } catch {
+      // Clipboard access can be refused; show the link so it can be copied by hand.
+      setCopyNote(link);
+    }
+  }
 
   function chooseTextSize(size) {
     setTextSize(size);
@@ -302,6 +317,14 @@ export default function ChapterReader({
           ))}
           <footer className="reader__ending">
             <p>Akhir bab {ordinal(chapter.number)}.</p>
+            <div className="reader__share">
+              <button className="reader__copy" type="button" onClick={copyChapterLink}>
+                Salin tautan bab
+              </button>
+              <p className="reader__copy-note" role="status">
+                {copyNote}
+              </p>
+            </div>
             <div className="reader__pager">
               {previous && (
                 <button className="reader__turn reader__turn--prev" type="button" onClick={() => goTo(previous)}>
