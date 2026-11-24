@@ -149,3 +149,13 @@ export function saveScroll(id, ratio) {
     // Storage may be blocked; the position just isn't kept.
   }
 }
+
+export function resetReading() {
+  try {
+    [LAST_CHAPTER_KEY, READ_KEY, SCROLL_KEY].forEach((key) => window.localStorage.removeItem(key));
+  } catch {
+    return;
+  }
+  window.dispatchEvent(new CustomEvent(LAST_CHAPTER_EVENT, { detail: null }));
+  window.dispatchEvent(new CustomEvent(READ_EVENT, { detail: null }));
+}

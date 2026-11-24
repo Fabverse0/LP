@@ -9,6 +9,7 @@ import {
   READ_EVENT,
   readLastChapterId,
   readScroll,
+  resetReading,
   readingMinutes,
 } from "../content/chapters.js";
 import "./ChapterIndex.css";
@@ -77,10 +78,33 @@ function useResumePercent(chapterId, readerOpen) {
   return percent;
 }
 
+function useConfirmReset() {
+  const [confirming, setConfirming] = useState(false);
+
+  useEffect(() => {
+    if (!confirming) return undefined;
+    const timer = window.setTimeout(() => setConfirming(false), 4000);
+    return () => window.clearTimeout(timer);
+  }, [confirming]);
+
+  function press() {
+    if (confirming) {
+      resetReading();
+      setConfirming(false);
+    } else {
+      setConfirming(true);
+    }
+  }
+
+  return [confirming, press];
+}
+
 export default function ChapterIndex({ onOpen, readerOpen = false }) {
   const lastChapter = getChapter(useLastChapterId());
   const readIds = useReadIds();
   const resumePercent = useResumePercent(lastChapter?.id, readerOpen);
+  const [confirmingReset, pressReset] = useConfirmReset();
+  const hasTrail = Boolean(lastChapter) || readIds.length > 0;
   const openWord = String(countWords[availableChapters.length] ?? availableChapters.length);
   const openCount = openWord[0].toUpperCase() + openWord.slice(1);
 
@@ -110,6 +134,11 @@ export default function ChapterIndex({ onOpen, readerOpen = false }) {
                   {resumePercent > 0 && ` · ${resumePercent}%`}
                 </span>
                 <Arrow />
+              </button>
+            )}
+            {hasTrail && (
+              <button className="chapter-index__reset" type="button" onClick={pressReset}>
+                {confirmingReset ? "Yakin? Tekan lagi untuk menghapus" : "Hapus jejak baca"}
               </button>
             )}
           </div>
