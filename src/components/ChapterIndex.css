@@ -315,3 +315,20 @@ button.chapter-index__row:focus-visible .chapter-index__arrow {
     transform: none;
   }
 }
+
+.chapter-index__reset {
+  min-height: 44px;
+  align-self: flex-start;
+  padding: 8px 0;
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--size-small);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.chapter-index__reset:hover {
+  color: var(--pink-paper);
+}

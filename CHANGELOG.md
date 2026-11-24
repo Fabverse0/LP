@@ -1,5 +1,11 @@
 # Catatan perubahan
 
+## Putaran 5
+
+- Tombol "Lanjutkan" menampilkan persen progres bab.
+- Kerangka kanji di hero mengikuti warna suasana.
+- Tombol "Hapus jejak baca" (dua langkah) membersihkan bab terakhir, penanda selesai, dan posisi gulir.
+
 ## Putaran 4
 
 - Pembaca membuka bab di posisi terakhir dibaca (`kage:scroll` di `localStorage`).

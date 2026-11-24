@@ -8,6 +8,8 @@ import {
   readChapterIds,
   READ_EVENT,
   readLastChapterId,
+  readScroll,
+  resetReading,
   readingMinutes,
 } from "../content/chapters.js";
 import "./ChapterIndex.css";
@@ -63,9 +65,46 @@ function useReadIds() {
   return ids;
 }
 
-export default function ChapterIndex({ onOpen }) {
+function useResumePercent(chapterId, readerOpen) {
+  const [percent, setPercent] = useState(0);
+
+  useEffect(() => {
+    if (!chapterId) return undefined;
+    // The reader saves its position after a short delay, so read it a beat later.
+    const timer = window.setTimeout(() => setPercent(Math.round(readScroll(chapterId) * 100)), 450);
+    return () => window.clearTimeout(timer);
+  }, [chapterId, readerOpen]);
+
+  return percent;
+}
+
+function useConfirmReset() {
+  const [confirming, setConfirming] = useState(false);
+
+  useEffect(() => {
+    if (!confirming) return undefined;
+    const timer = window.setTimeout(() => setConfirming(false), 4000);
+    return () => window.clearTimeout(timer);
+  }, [confirming]);
+
+  function press() {
+    if (confirming) {
+      resetReading();
+      setConfirming(false);
+    } else {
+      setConfirming(true);
+    }
+  }
+
+  return [confirming, press];
+}
+
+export default function ChapterIndex({ onOpen, readerOpen = false }) {
   const lastChapter = getChapter(useLastChapterId());
   const readIds = useReadIds();
+  const resumePercent = useResumePercent(lastChapter?.id, readerOpen);
+  const [confirmingReset, pressReset] = useConfirmReset();
+  const hasTrail = Boolean(lastChapter) || readIds.length > 0;
   const openWord = String(countWords[availableChapters.length] ?? availableChapters.length);
   const openCount = openWord[0].toUpperCase() + openWord.slice(1);
 
@@ -92,8 +131,14 @@ export default function ChapterIndex({ onOpen }) {
               >
                 <span>
                   Lanjutkan: <strong>{lastChapter.title}</strong>
+                  {resumePercent > 0 && ` · ${resumePercent}%`}
                 </span>
                 <Arrow />
+              </button>
+            )}
+            {hasTrail && (
+              <button className="chapter-index__reset" type="button" onClick={pressReset}>
+                {confirmingReset ? "Yakin? Tekan lagi untuk menghapus" : "Hapus jejak baca"}
               </button>
             )}
           </div>

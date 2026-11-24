@@ -367,6 +367,14 @@ p {
   -webkit-text-stroke: 2px rgb(255 255 255 / 20%);
 }
 
+.site-shell[data-hour="ember"] .hero__kanji {
+  -webkit-text-stroke-color: rgb(255 214 190 / 24%);
+}
+
+.site-shell[data-hour="night"] .hero__kanji {
+  -webkit-text-stroke-color: rgb(212 237 246 / 22%);
+}
+
 @media (max-width: 680px) {
   .hero__kanji {
     display: none;
