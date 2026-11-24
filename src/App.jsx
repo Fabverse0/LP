@@ -399,7 +399,7 @@ function App() {
 
         <SunEclipse />
 
-        <ChapterIndex onOpen={openChapter} />
+        <ChapterIndex onOpen={openChapter} readerOpen={readerOpen} />
 
         <section className="hour chapter" id="hour" aria-labelledby="hour-title">
           <div className="hour__layout">
