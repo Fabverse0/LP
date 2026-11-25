@@ -354,6 +354,13 @@ p {
   line-height: 1.4;
 }
 
+@media (max-height: 600px) {
+  /* On a short window the outline would sit behind the copy instead of beside it. */
+  .hero__kanji {
+    display: none;
+  }
+}
+
 .hero__kanji {
   position: absolute;
   top: 12%;
