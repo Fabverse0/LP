@@ -1,5 +1,14 @@
 # Catatan perubahan
 
+## Putaran 6
+
+- Tombol baca di header dan hero berubah menjadi "Lanjutkan" bila ada jejak baca.
+- Tombol huruf `H` `K` `B` `T` `D` `G` melompat antarbagian, dan tidak aktif saat dialog terbuka.
+- Pengujian otomatis (`npm test`) untuk daftar bab dan penyimpanan jejak baca.
+- Aturan cetak tanpa elemen tetap dan efek gerak, teks hitam agar terbaca tanpa warna latar.
+- Kanji hero disembunyikan di jendela pendek, semua kanji bertanda `lang="ja"`.
+- `engines` mewajibkan Node 20 atau lebih baru.
+
 ## Putaran 5
 
 - Tombol "Lanjutkan" menampilkan persen progres bab.
