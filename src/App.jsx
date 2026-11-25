@@ -171,6 +171,8 @@ function usePageShortcuts({ onHour, onRead, disabled }) {
 
     function handleKey(event) {
       if (event.metaKey || event.ctrlKey || event.altKey || isTypingTarget(event.target)) return;
+      // The help dialog and the gallery lightbox are modal; keys stay inside them.
+      if (document.querySelector("dialog[open]")) return;
       const hourIndex = ["1", "2", "3"].indexOf(event.key);
       if (hourIndex !== -1) {
         onHour(hours[hourIndex].id);
