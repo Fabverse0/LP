@@ -34,6 +34,12 @@ const shortcuts = [
   { keys: ["1"], label: "Suasana senja" },
   { keys: ["2"], label: "Suasana sisa bara" },
   { keys: ["3"], label: "Suasana malam" },
+  { keys: ["H"], label: "Ke awal halaman" },
+  { keys: ["K"], label: "Ke bagian Kisah" },
+  { keys: ["B"], label: "Ke daftar bab" },
+  { keys: ["T"], label: "Ke bagian Tokoh" },
+  { keys: ["D"], label: "Ke bagian Dunia" },
+  { keys: ["G"], label: "Ke galeri Bingkai" },
   { keys: ["←", "→"], label: "Bab sebelumnya / berikutnya di pembaca" },
   { keys: ["?"], label: "Tampilkan pintasan ini" },
 ];
