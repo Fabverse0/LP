@@ -302,7 +302,7 @@ function App() {
         <section className="hero" id="top" aria-labelledby="hero-title">
           <HeroScene />
           <EmberField hour={activeHour} />
-          <span className="hero__kanji" aria-hidden="true">
+          <span className="hero__kanji" lang="ja" aria-hidden="true">
             影
           </span>
           <div className="hero__copy">
