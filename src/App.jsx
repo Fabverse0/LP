@@ -19,6 +19,7 @@ import BackToTop from "./components/BackToTop.jsx";
 import Newsletter from "./components/Newsletter.jsx";
 import KeyboardHelp from "./components/KeyboardHelp.jsx";
 import {
+  LAST_CHAPTER_EVENT,
   availableChapters,
   chapters,
   getChapter,
@@ -254,6 +255,23 @@ function useReadingTitle(readerOpen, chapterId) {
   }, [readerOpen, chapterId]);
 }
 
+function useHasTrail() {
+  const [hasTrail, setHasTrail] = useState(false);
+
+  useEffect(() => {
+    const sync = () => setHasTrail(Boolean(readLastChapterId()));
+    sync();
+    window.addEventListener(LAST_CHAPTER_EVENT, sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener(LAST_CHAPTER_EVENT, sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+
+  return hasTrail;
+}
+
 function ArrowMark() {
   return (
     <svg aria-hidden="true" viewBox="0 0 40 40" fill="none">
@@ -278,6 +296,7 @@ function App() {
   }, []);
 
   useSectionReveal();
+  const hasTrail = useHasTrail();
   useThemeColor(activeHour);
   useReadingTitle(readerOpen, readerChapter);
   useChapterLink(readerOpen, readerChapter, openChapter);
@@ -296,7 +315,12 @@ function App() {
         Langsung ke konten
       </a>
 
-      <SiteHeader links={navLinks} onRead={openReader} readControls="chapter-reader" />
+      <SiteHeader
+        links={navLinks}
+        onRead={openReader}
+        readLabel={hasTrail ? "Lanjutkan" : "Baca"}
+        readControls="chapter-reader"
+      />
 
       <main id="main">
         <section className="hero" id="top" aria-labelledby="hero-title">
