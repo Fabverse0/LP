@@ -143,6 +143,15 @@ function usePersistentHour() {
   return [activeHour, setActiveHour];
 }
 
+const JUMP_KEYS = {
+  h: "top",
+  k: "story",
+  b: "chapters",
+  t: "characters",
+  d: "world",
+  g: "gallery",
+};
+
 function isTypingTarget(target) {
   return (
     target instanceof HTMLElement &&
@@ -162,6 +171,9 @@ function usePageShortcuts({ onHour, onRead, disabled }) {
       } else if (event.key.toLowerCase() === "r") {
         event.preventDefault();
         onRead();
+      } else if (!event.shiftKey && JUMP_KEYS[event.key.toLowerCase()]) {
+        // Smooth or instant movement comes from the page's scroll-behavior rule.
+        document.getElementById(JUMP_KEYS[event.key.toLowerCase()])?.scrollIntoView();
       }
     }
 
