@@ -9,6 +9,9 @@
     "react",
     "vite"
   ],
+  "engines": {
+    "node": ">=20"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
