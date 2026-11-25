@@ -307,7 +307,7 @@ export default function ChapterReader({
         </figure>
 
         <div className="reader__prose">
-          <div className="reader__ornament" aria-hidden="true">
+          <div className="reader__ornament" lang="ja" aria-hidden="true">
             <span>{chapter.kanji}</span>
           </div>
           {chapter.paragraphs.map((paragraph, position) => (

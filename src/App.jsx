@@ -19,6 +19,7 @@ import BackToTop from "./components/BackToTop.jsx";
 import Newsletter from "./components/Newsletter.jsx";
 import KeyboardHelp from "./components/KeyboardHelp.jsx";
 import {
+  LAST_CHAPTER_EVENT,
   availableChapters,
   chapters,
   getChapter,
@@ -33,6 +34,12 @@ const shortcuts = [
   { keys: ["1"], label: "Suasana senja" },
   { keys: ["2"], label: "Suasana sisa bara" },
   { keys: ["3"], label: "Suasana malam" },
+  { keys: ["H"], label: "Ke awal halaman" },
+  { keys: ["K"], label: "Ke bagian Kisah" },
+  { keys: ["B"], label: "Ke daftar bab" },
+  { keys: ["T"], label: "Ke bagian Tokoh" },
+  { keys: ["D"], label: "Ke bagian Dunia" },
+  { keys: ["G"], label: "Ke galeri Bingkai" },
   { keys: ["←", "→"], label: "Bab sebelumnya / berikutnya di pembaca" },
   { keys: ["?"], label: "Tampilkan pintasan ini" },
 ];
@@ -142,6 +149,15 @@ function usePersistentHour() {
   return [activeHour, setActiveHour];
 }
 
+const JUMP_KEYS = {
+  h: "top",
+  k: "story",
+  b: "chapters",
+  t: "characters",
+  d: "world",
+  g: "gallery",
+};
+
 function isTypingTarget(target) {
   return (
     target instanceof HTMLElement &&
@@ -155,12 +171,17 @@ function usePageShortcuts({ onHour, onRead, disabled }) {
 
     function handleKey(event) {
       if (event.metaKey || event.ctrlKey || event.altKey || isTypingTarget(event.target)) return;
+      // The help dialog and the gallery lightbox are modal; keys stay inside them.
+      if (document.querySelector("dialog[open]")) return;
       const hourIndex = ["1", "2", "3"].indexOf(event.key);
       if (hourIndex !== -1) {
         onHour(hours[hourIndex].id);
       } else if (event.key.toLowerCase() === "r") {
         event.preventDefault();
         onRead();
+      } else if (!event.shiftKey && JUMP_KEYS[event.key.toLowerCase()]) {
+        // Smooth or instant movement comes from the page's scroll-behavior rule.
+        document.getElementById(JUMP_KEYS[event.key.toLowerCase()])?.scrollIntoView();
       }
     }
 
@@ -254,6 +275,23 @@ function useReadingTitle(readerOpen, chapterId) {
   }, [readerOpen, chapterId]);
 }
 
+function useHasTrail() {
+  const [hasTrail, setHasTrail] = useState(false);
+
+  useEffect(() => {
+    const sync = () => setHasTrail(Boolean(readLastChapterId()));
+    sync();
+    window.addEventListener(LAST_CHAPTER_EVENT, sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener(LAST_CHAPTER_EVENT, sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+
+  return hasTrail;
+}
+
 function ArrowMark() {
   return (
     <svg aria-hidden="true" viewBox="0 0 40 40" fill="none">
@@ -278,6 +316,7 @@ function App() {
   }, []);
 
   useSectionReveal();
+  const hasTrail = useHasTrail();
   useThemeColor(activeHour);
   useReadingTitle(readerOpen, readerChapter);
   useChapterLink(readerOpen, readerChapter, openChapter);
@@ -296,13 +335,18 @@ function App() {
         Langsung ke konten
       </a>
 
-      <SiteHeader links={navLinks} onRead={openReader} readControls="chapter-reader" />
+      <SiteHeader
+        links={navLinks}
+        onRead={openReader}
+        readLabel={hasTrail ? "Lanjutkan" : "Baca"}
+        readControls="chapter-reader"
+      />
 
       <main id="main">
         <section className="hero" id="top" aria-labelledby="hero-title">
           <HeroScene />
           <EmberField hour={activeHour} />
-          <span className="hero__kanji" aria-hidden="true">
+          <span className="hero__kanji" lang="ja" aria-hidden="true">
             影
           </span>
           <div className="hero__copy">
@@ -337,7 +381,7 @@ function App() {
               aria-haspopup="dialog"
               aria-controls="chapter-reader"
             >
-              Mulai membaca <ArrowMark />
+              {hasTrail ? "Lanjutkan membaca" : "Mulai membaca"} <ArrowMark />
             </button>
           </div>
           <p className="hero__meta">

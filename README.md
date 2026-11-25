@@ -12,6 +12,8 @@ npm run dev
 ```
 
 Build produksi: `npm run build`, lalu `npm run preview`.
+`npm run check` menjalankan build yang sama, dan `npm test` menjalankan
+pengujian dengan runner bawaan Node (`tests/`, butuh Node 20 atau lebih baru).
 
 ## Isi halaman
 
@@ -33,6 +35,9 @@ Build produksi: `npm run build`, lalu `npm run preview`.
 
 `R` baca bab terakhir, `1` `2` `3` ganti suasana, `←` `→` pindah bab di pembaca,
 `?` tampilkan daftar pintasan.
+
+Lompat antarbagian: `H` awal, `K` kisah, `B` daftar bab, `T` tokoh, `D` dunia, `G` galeri.
+Pintasan tidak aktif saat dialog terbuka atau saat mengetik di kolom isian.
 
 ## Tautan ke bab
 

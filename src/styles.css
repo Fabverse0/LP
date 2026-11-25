@@ -354,6 +354,13 @@ p {
   line-height: 1.4;
 }
 
+@media (max-height: 600px) {
+  /* On a short window the outline would sit behind the copy instead of beside it. */
+  .hero__kanji {
+    display: none;
+  }
+}
+
 .hero__kanji {
   position: absolute;
   top: 12%;
@@ -1489,5 +1496,30 @@ p {
   .hero__layer {
     animation: none !important;
     transform: none;
+  }
+}
+
+@media print {
+  .site-header,
+  .scroll-progress,
+  .back-to-top,
+  .ambient-sound,
+  .film-grain,
+  .intro-curtain,
+  .hour-wipe,
+  .ember-field,
+  .keyboard-help,
+  .hero__cue,
+  .hero__cta {
+    display: none !important;
+  }
+
+  /* Browsers drop background colours when printing, so light text would vanish. */
+  .site-shell,
+  .site-shell * {
+    background: none !important;
+    color: #000 !important;
+    text-shadow: none !important;
+    -webkit-text-stroke: 0 !important;
   }
 }

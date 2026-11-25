@@ -8,7 +8,7 @@ function Track() {
       {marqueeLines.map((line) => (
         <li className="marquee__line" key={line}>
           {line}
-          <span className="marquee__mark">影</span>
+          <span className="marquee__mark" lang="ja">影</span>
         </li>
       ))}
     </ul>
