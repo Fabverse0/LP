@@ -361,7 +361,7 @@ function App() {
               aria-haspopup="dialog"
               aria-controls="chapter-reader"
             >
-              Mulai membaca <ArrowMark />
+              {hasTrail ? "Lanjutkan membaca" : "Mulai membaca"} <ArrowMark />
             </button>
           </div>
           <p className="hero__meta">
