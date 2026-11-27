@@ -91,6 +91,8 @@ function useConfirmReset() {
     if (confirming) {
       resetReading();
       setConfirming(false);
+      // The button disappears with the trail; hand focus to the section heading.
+      document.getElementById("chapters-title")?.focus({ preventScroll: true });
     } else {
       setConfirming(true);
     }
@@ -115,7 +117,7 @@ export default function ChapterIndex({ onOpen, readerOpen = false }) {
           <p className="chapter-index__eyebrow" data-reveal>
             Kage · {chapters.length} bab
           </p>
-          <h2 className="chapter-index__title" id="chapters-title" data-reveal>
+          <h2 className="chapter-index__title" id="chapters-title" tabIndex={-1} data-reveal>
             Daftar bab
           </h2>
           <div className="chapter-index__aside">
