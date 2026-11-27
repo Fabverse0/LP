@@ -222,6 +222,7 @@ export default function Storyboard() {
                   aria-labelledby={`storyboard-${panel.id}`}
                 >
                   <span className="storyboard__num" aria-hidden="true">
+                    <span className="storyboard__num-label">Adegan</span>
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div className="storyboard__copy">
