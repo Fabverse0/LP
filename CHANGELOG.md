@@ -1,5 +1,13 @@
 # Catatan perubahan
 
+## Putaran 7
+
+- Peta perjalanan memakai judul, catatan, dan status dari daftar bab.
+- Angka besar di storyboard diberi label "Adegan" agar tidak terbaca sebagai nomor bab.
+- Tautan `#baca/<id>` yang ditempel di halaman terbuka kini langsung membuka bab.
+- Fokus keyboard pindah ke judul daftar bab setelah jejak baca dihapus.
+- Pengujian baru menjaga peta, fallback tanpa JavaScript, dan manifest tetap sesuai konten.
+
 ## Putaran 6
 
 - Tombol baca di header dan hero berubah menjadi "Lanjutkan" bila ada jejak baca.
