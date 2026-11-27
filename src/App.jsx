@@ -244,9 +244,15 @@ const READ_HASH = /^#baca\/([a-z0-9-]+)$/;
 function useChapterLink(readerOpen, chapterId, openChapter) {
   // A shared link like /#baca/sungai-yang-sama opens that chapter on arrival.
   useEffect(() => {
-    const match = window.location.hash.match(READ_HASH);
-    const chapter = match ? getChapter(match[1]) : null;
-    if (chapter?.status === "available") openChapter(chapter.id);
+    function openFromHash() {
+      const match = window.location.hash.match(READ_HASH);
+      const chapter = match ? getChapter(match[1]) : null;
+      if (chapter?.status === "available") openChapter(chapter.id);
+    }
+
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+    return () => window.removeEventListener("hashchange", openFromHash);
   }, [openChapter]);
 
   // While reading, the address bar points at the chapter so it can be copied.

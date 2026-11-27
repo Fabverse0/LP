@@ -283,3 +283,13 @@
     transform: translateX(0.18em);
   }
 }
+
+/* The big figure counts scenes, not chapters; the label says so. */
+.storyboard__num-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: var(--size-small);
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-transform: uppercase;
+}

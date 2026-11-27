@@ -1,6 +1,8 @@
 // Isi dunia Kage: tokoh, istilah, jalur perjalanan, dan larik pendek.
 // Semua teks mengikuti nada bab pertama: tenang, kalimat pendek.
 
+import { chapters } from "./chapters.js";
+
 export const characters = [
   {
     id: "ronin",
@@ -140,58 +142,25 @@ export const glossary = [
 ];
 
 // Titik di peta perjalanan. x/y dalam satuan viewBox 1000 x 600.
-export const waypoints = [
-  {
-    id: "ladang",
-    chapter: 1,
-    place: "Ladang",
-    title: "Jalan tanpa tuan",
-    note: "Rumput menutup bekas langkah. Matahari tinggal merah.",
-    x: 90,
-    y: 470,
-    released: true,
-  },
-  {
-    id: "persimpangan",
-    chapter: 2,
-    place: "Persimpangan",
-    title: "Roda di lumpur",
-    note: "Jalur terbelah dua. Sebuah gerobak terhenti.",
-    x: 330,
-    y: 360,
-    released: true,
-  },
-  {
-    id: "sungai",
-    chapter: 3,
-    place: "Jalan sungai",
-    title: "Lentera kecil",
-    note: "Mereka berjalan bersama sampai pohon pertama.",
-    x: 520,
-    y: 470,
-    released: true,
-  },
-  {
-    id: "jembatan",
-    chapter: 4,
-    place: "Jembatan kayu",
-    title: "Bekas roda",
-    note: "Jejak di tanah basah masih terlihat.",
-    x: 730,
-    y: 300,
-    released: false,
-  },
-  {
-    id: "celah",
-    chapter: 5,
-    place: "Celah gunung",
-    title: "Sebelum malam",
-    note: "Tempat perintah terakhir menunjuk.",
-    x: 900,
-    y: 120,
-    released: false,
-  },
+// Hanya tempat dan koordinat yang ditulis di sini. Judul, catatan, dan status
+// diambil dari daftar bab supaya peta tidak bisa berbeda dari ceritanya.
+const route = [
+  { id: "ladang", chapter: 1, place: "Ladang", x: 90, y: 470 },
+  { id: "sungai", chapter: 2, place: "Sungai", x: 330, y: 360 },
+  { id: "desa", chapter: 3, place: "Desa hulu", x: 520, y: 470 },
+  { id: "pagar", chapter: 4, place: "Pagar desa", x: 730, y: 300 },
+  { id: "celah", chapter: 5, place: "Pendakian", x: 900, y: 120 },
 ];
+
+export const waypoints = route.map((stop) => {
+  const chapter = chapters.find((entry) => entry.number === stop.chapter);
+  return {
+    ...stop,
+    title: chapter.title,
+    note: chapter.intro,
+    released: chapter.status === "available",
+  };
+});
 
 // Larik pendek untuk pita berjalan. Tiga larik pertama membentuk haiku 5-7-5.
 export const haiku = {
